@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeBET — Analyses Basketball & Cotes Boostées Value (Bookmakers ANJ)</title>
+<meta name="description" content="TradeBET : service d'analyses et de pronostics basketball + détection de cotes boostées à valeur objective sur les bookmakers agréés ANJ. Interdit aux mineurs. Jouer comporte des risques.">
+<style>
+  :root{
+    --bg:#05060f;
+    --bg2:#0a0d1f;
+    --card:rgba(255,255,255,.04);
+    --border:rgba(120,140,255,.18);
+    --cyan:#22d3ee;
+    --violet:#8b5cf6;
+    --orange:#fb923c;
+    --green:#34d399;
+    --txt:#e6e9f5;
+    --muted:#8a91ad;
+    --font:'Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--txt);font-family:var(--font);overflow-x:hidden}
+
+  /* ===== Fond animé ===== */
+  .bg-grid{position:fixed;inset:0;z-index:-2;
+    background-image:linear-gradient(rgba(139,92,246,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,.06) 1px,transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 100%);
+    -webkit-mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 100%);
+  }
+  .glow{position:fixed;border-radius:50%;filter:blur(120px);z-index:-1;opacity:.35;pointer-events:none}
+  .glow.g1{width:600px;height:600px;background:var(--violet);top:-200px;left:-150px;animation:float 14s ease-in-out infinite}
+  .glow.g2{width:500px;height:500px;background:var(--cyan);top:30%;right:-200px;animation:float 18s ease-in-out infinite reverse}
+  .glow.g3{width:400px;height:400px;background:#e11d48;bottom:-150px;left:30%;opacity:.15;animation:float 20s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
+
+  .container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+  /* ===== Bandeau prévention (haut) ===== */
+  .warning-top{background:#111;border-bottom:1px solid rgba(255,255,255,.12);padding:10px 16px;text-align:center;font-size:.8rem;color:#ddd;letter-spacing:.02em}
+  .warning-top strong{color:#fff}
+  .warning-top a{color:var(--cyan);text-decoration:none}
+
+  /* ===== Nav ===== */
+  nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0}
+  .logo{font-size:1.4rem;font-weight:800;letter-spacing:.05em}
+  .logo span{background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .nav-links{display:flex;gap:28px;align-items:center}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;transition:color .2s}
+  .nav-links a:hover{color:var(--txt)}
+  .badge-18{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:50%;border:2px solid #e11d48;color:#e11d48;font-weight:800;font-size:.75rem;flex-shrink:0}
+
+  /* ===== Hero ===== */
+  .hero{padding:80px 0 60px;text-align:center;position:relative}
+  .hero .tag{display:inline-block;padding:6px 16px;border:1px solid var(--border);border-radius:100px;font-size:.78rem;color:var(--cyan);background:rgba(34,211,238,.05);margin-bottom:28px;letter-spacing:.12em;text-transform:uppercase}
+  h1{font-size:clamp(2.2rem,5.5vw,4rem);line-height:1.1;font-weight:800;margin-bottom:22px}
+  h1 .grad{background:linear-gradient(90deg,var(--cyan) 0%,var(--violet) 60%,var(--orange) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.sub{color:var(--muted);font-size:1.1rem;max-width:640px;margin:0 auto 14px;line-height:1.7}
+  .hero p.legal-note{font-size:.8rem;color:#6b7192;max-width:560px;margin:0 auto 36px;line-height:1.6}
+  .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-block;padding:15px 34px;border-radius:12px;font-weight:700;font-size:1rem;text-decoration:none;transition:transform .2s,box-shadow .2s;cursor:pointer;border:none}
+  .btn-primary{background:linear-gradient(90deg,var(--cyan),var(--violet));color:#05060f;box-shadow:0 0 30px rgba(139,92,246,.35)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 45px rgba(139,92,246,.55)}
+  .btn-ghost{background:transparent;color:var(--txt);border:1px solid var(--border)}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+
+  /* ===== Sections ===== */
+  section{padding:70px 0}
+  .section-tag{color:var(--cyan);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:block}
+  h2{font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:800;margin-bottom:16px}
+  .section-intro{color:var(--muted);max-width:620px;line-height:1.7;margin-bottom:44px}
+
+  .grid{display:grid;gap:22px}
+  .grid-2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+  .grid-3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:30px;backdrop-filter:blur(8px);transition:transform .25s,border-color .25s;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-4px);border-color:rgba(34,211,238,.45)}
+  .card .icon{font-size:1.8rem;margin-bottom:16px;display:block}
+  .card h3{font-size:1.15rem;margin-bottom:10px;font-weight:700}
+  .card p{color:var(--muted);font-size:.92rem;line-height:1.65}
+  .card .line{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0;transition:opacity .25s}
+  .card:hover .line{opacity:1}
+
+  /* ===== Offre double ===== */
+  .offer-card{border-radius:20px;padding:36px;border:1px solid var(--border);position:relative;overflow:hidden}
+  .offer-basket{background:linear-gradient(160deg,rgba(251,146,60,.08),rgba(255,255,255,.02))}
+  .offer-boost{background:linear-gradient(160deg,rgba(34,211,238,.08),rgba(255,255,255,.02))}
+  .offer-card .pill{display:inline-block;font-size:.72rem;letter-spacing:.15em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:20px;font-weight:700}
+  .offer-basket .pill{background:rgba(251,146,60,.15);color:var(--orange);border:1px solid rgba(251,146,60,.3)}
+  .offer-boost .pill{background:rgba(34,211,238,.15);color:var(--cyan);border:1px solid rgba(34,211,238,.3)}
+  .offer-card h3{font-size:1.5rem;margin-bottom:14px}
+  .offer-card p{color:var(--muted);line-height:1.7;font-size:.95rem;margin-bottom:16px}
+  .offer-card ul{list-style:none;margin-top:8px}
+  .offer-card li{padding:9px 0;color:var(--txt);font-size:.92rem;border-bottom:1px dashed rgba(255,255,255,.07);display:flex;gap:10px;align-items:flex-start}
+  .offer-card li:last-child{border-bottom:none}
+  .offer-card li::before{content:"▸";color:var(--cyan);font-weight:700;flex-shrink:0}
+  .offer-basket li::before{color:var(--orange)}
+
+  /* ===== Méthode / stats ===== */
+  .method-steps{counter-reset:step}
+  .step{display:flex;gap:22px;padding:26px 0;border-bottom:1px solid rgba(255,255,255,.06);align-items:flex-start}
+  .step:last-child{border-bottom:none}
+  .step-num{counter-increment:step;flex-shrink:0;width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,rgba(34,211,238,.15),rgba(139,92,246,.15));border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--cyan);font-size:1.1rem}
+  .step-num::before{content:counter(step,decimal-leading-zero)}
+  .step h4{font-size:1.05rem;margin-bottom:6px}
+  .step p{color:var(--muted);font-size:.92rem;line-height:1.65}
+
+  /* ===== Pricing ===== */
+  .pricing-grid{display:grid;gap:24px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:stretch}
+  .price-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:38px 32px;text-align:center;position:relative;display:flex;flex-direction:column;backdrop-filter:blur(8px)}
+  .price-card.featured{border:1px solid rgba(34,211,238,.5);box-shadow:0 0 50px rgba(34,211,238,.12);background:linear-gradient(180deg,rgba(34,211,238,.07),rgba(255,255,255,.02))}
+  .price-card .flag{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(90deg,var(--cyan),var(--violet));color:#05060f;font-size:.7rem;font-weight:800;padding:5px 16px;border-radius:100px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+  .price-card h3{font-size:1.05rem;color:var(--muted);font-weight:600;margin-bottom:18px;letter-spacing:.05em;text-transform:uppercase}
+  .price{font-size:3rem;font-weight:800;margin-bottom:4px}
+  .price small{font-size:1rem;color:var(--muted);font-weight:500}
+  .price-note{color:var(--muted);font-size:.85rem;margin-bottom:26px;line-height:1.5}
+  .price-card ul{list-style:none;text-align:left;margin-bottom:30px;flex-grow:1}
+  .price-card li{padding:8px 0;font-size:.9rem;color:var(--txt);display:flex;gap:10px}
+  .price-card li::before{content:"✓";color:var(--green);font-weight:700}
+  .pricing-legal{margin-top:26px;font-size:.78rem;color:#6b7192;line-height:1.6;text-align:center;max-width:720px;margin-left:auto;margin-right:auto}
+
+  /* ===== Transparence / disclaimers ===== */
+  .transparency{background:linear-gradient(180deg,rgba(139,92,246,.05),transparent);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05)}
+  .disclaimer-box{background:rgba(225,29,72,.05);border:1px solid rgba(225,29,72,.25);border-radius:16px;padding:28px;margin-top:30px}
+  .disclaimer-box h4{color:#fda4af;margin-bottom:12px;font-size:1rem;display:flex;align-items:center;gap:10px}
+  .disclaimer-box p,.disclaimer-box li{color:#c9cede;font-size:.88rem;line-height:1.7}
+  .disclaimer-box ul{margin:10px 0 0 20px}
+
+  /* ===== FAQ ===== */
+  details{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:14px;overflow:hidden}
+  summary{padding:20px 24px;cursor:pointer;font-weight:600;font-size:.98rem;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px}
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";color:var(--cyan);font-size:1.4rem;font-weight:300;transition:transform .2s}
+  details[open] summary::after{transform:rotate(45deg)}
+  details .faq-body{padding:0 24px 22px;color:var(--muted);font-size:.92rem;line-height:1.7}
+
+  /* ===== CTA final ===== */
+  .final-cta{text-align:center;padding:90px 0}
+  .final-cta .box{background:linear-gradient(135deg,rgba(34,211,238,.08),rgba(139,92,246,.08));border:1px solid var(--border);border-radius:24px;padding:60px 40px}
+
+  /* ===== Bandeau prévention (bas) + footer ===== */
+  .prevention{background:#0c0c12;border-top:1px solid rgba(255,255,255,.08);padding:44px 0}
+  .prevention h3{font-size:1.05rem;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+  .prevention p{color:#a7adc4;font-size:.85rem;line-height:1.75;margin-bottom:12px}
+  .prevention a{color:var(--cyan);text-decoration:none}
+  .prevention a:hover{text-decoration:underline}
+  .prevention .helpline{display:inline-flex;align-items:center;gap:12px;background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.25);border-radius:12px;padding:14px 22px;margin:14px 0;font-weight:700;font-size:1.05rem}
+  .prevention .helpline small{display:block;font-weight:400;color:var(--muted);font-size:.75rem}
+  footer{background:#08080d;padding:34px 0;border-top:1px solid rgba(255,255,255,.05)}
+  footer p{color:#5a5f78;font-size:.78rem;line-height:1.7;text-align:center}
+
+  @media(max-width:640px){
+    .nav-links a:not(.btn){display:none}
+    section{padding:50px 0}
+    .step{flex-direction:column;gap:12px}
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+
+<!-- Bandeau réglementaire haut -->
+<div class="warning-top">
+  <strong>JOUER COMPORTE DES RISQUES : ENDETTEMENT, ISOLEMENT, DÉPENDANCE.</strong>
+  Pour être aidé, appelez le <strong>09&nbsp;74&nbsp;75&nbsp;13&nbsp;13</strong> (appel non surtaxé) — <a href="https://www.joueurs-info-service.fr" target="_blank" rel="noopener">joueurs-info-service.fr</a> · Interdit aux mineurs (−18)
+</div>
+
+<div class="container">
+  <nav>
+    <div class="logo">TRADE<span>BET</span></div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#methode">Méthode</a>
+      <a href="#tarifs">Tarifs</a>
+      <a href="#faq">FAQ</a>
+      <span class="badge-18">18+</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <span class="tag">⬢ Analyses basketball · Data-driven · Bookmakers agréés ANJ</span>
+    <h1>L'analyse basketball<br><span class="grad">à l'ère de la data.</span></h1>
+    <p class="sub">TradeBET est un service d'aide à la décision : des analyses détaillées sur le basketball (NBA, Euroligue, Betclic Élite) et un module de détection de <strong>cotes boostées à valeur objective</strong> sur les bookmakers agréés en France.</p>
+    <p class="legal-note">TradeBET ne garantit aucun gain. Les paris sportifs comportent un risque réel de perte financière. Les contenus proposés sont des analyses et des opinions, pas des promesses de résultat. Réservé aux personnes majeures.</p>
+    <div class="cta-row">
+      <a href="#tarifs" class="btn btn-primary">Découvrir l'offre</a>
+      <a href="#methode" class="btn btn-ghost">Comprendre la méthode</a>
+    </div>
+  </header>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="container">
+    <span class="section-tag">// Deux modules, un abonnement</span>
+    <h2>Ce que comprend TradeBET</h2>
+    <p class="section-intro">Un abonnement unique donnant accès à deux services complémentaires, pensés pour les parieurs qui veulent une approche structurée et raisonnée.</p>
+    <div class="grid grid-2">
+      <div class="offer-card offer-basket">
+        <span class="pill">Module 01 — Basketball</span>
+        <h3>🏀 Analyses & pronostics basketball</h3>
+        <p>Des analyses complètes avant chaque sélection : forme des équipes, effectifs, blessures, calendriers, statistiques avancées et lecture du marché.</p>
+        <ul>
+          <li>Sélections argumentées sur NBA, Euroligue et championnats européens</li>
+          <li>Analyse détaillée fournie avec chaque pronostic (jamais de pari "à l'aveugle")</li>
+          <li>Mise conseillée exprimée en % de bankroll, jamais en montant imposé</li>
+          <li>Suivi transparent de l'historique complet, pertes incluses</li>
+        </ul>
+      </div>
+      <div class="offer-card offer-boost">
+        <span class="pill">Module 02 — Inclus</span>
+        <h3>⚡ Cotes boostées à valeur objective</h3>
+        <p>Chaque cote boostée proposée par les bookmakers agréés ANJ est comparée à la probabilité implicite du marché. Seuls les boosts présentant une <strong>valeur mathématique mesurable</strong> sont transmis. Module 100&nbsp;% ANJ.</p>
+        <ul>
+          <li>Détection sur l'ensemble des opérateurs agréés ANJ uniquement</li>
+          <li>Calcul de la value affiché : cote boostée vs cote de référence du marché</li>
+          <li>Espérance mathématique positive ≠ gain garanti : la variance existe toujours</li>
+          <li>Alertes envoyées en temps réel dès qu'un boost value est identifié</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTHODE -->
+<section id="methode">
+  <div class="container">
+    <span class="section-tag">// Process</span>
+    <h2>Une méthode, pas des promesses</h2>
+    <p class="section-intro">Le pari sportif reste un jeu de hasard raisonné : aucune méthode n'élimine le risque. Voici comment TradeBET travaille, en toute transparence.</p>
+    <div class="method-steps">
+      <div class="step">
+        <div class="step-num"></div>
+        <div>
+          <h4>Collecte & modélisation</h4>
+          <p>Agrégation de données statistiques (efficacité offensive/défensive, pace, rotations, historiques de confrontations) pour estimer des probabilités indépendantes sur chaque rencontre.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div>
+          <h4>Confrontation au marché</h4>
+          <p>Les probabilités estimées sont confrontées aux cotes du marché des opérateurs agréés ANJ. Un écart significatif = une value potentielle. Pas d'écart = pas de pari.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div>
+          <h4>Sélection & argumentation</h4>
+          <p>Chaque sélection publiée est accompagnée de son analyse, de la value estimée et d'une mise conseillée en pourcentage de bankroll (gestion prudente, généralement 1 à 3 %).</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"></div>
+        <div>
+          <h4>Suivi transparent</h4>
+          <p>Historique intégral publié et tenu à jour : gains, pertes, rendement. Les performances passées ne préjugent jamais des performances futures.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENGAGEMENTS / TRANSPARENCE -->
+<section class="transparency">
+  <div class="container">
+    <span class="section-tag">// Conformité & éthique</span>
+    <h2>Nos engagements</h2>
+    <div class="grid grid-3" style="margin-top:36px">
+      <div class="card"><span class="line"></span>
+        <span class="icon">🛡️</span>
+        <h3>Bookmakers ANJ uniquement</h3>
+        <p>Toutes les analyses et alertes portent exclusivement sur les opérateurs agréés par l'Autorité Nationale des Jeux. Aucune orientation vers des sites non autorisés en France.</p>
+      </div>
+      <div class="card"><span class="line"></span>
+        <span class="icon">📉</span>
+        <h3>Zéro promesse de gain</h3>
+        <p>Aucune promesse de revenus, de rentabilité ou d'"argent facile". Parier expose à un risque de perte. Ne misez que ce que vous pouvez vous permettre de perdre.</p>
+      </div>
+      <div class="card"><span class="line"></span>
+        <span class="icon">🔞</span>
+        <h3>Jeu responsable</h3>
+        <p>Service strictement réservé aux majeurs. TradeBET encourage l'auto-limitation, les pauses, et relaie les dispositifs d'aide (Joueurs Info Service, interdiction volontaire de jeux).</p>
+      </div>
+    </div>
+
+    <div class="disclaimer-box">
+      <h4>⚠️ Avertissement important</h4>
+      <p>TradeBET est un service d'information et d'analyse sportive. TradeBET n'est ni un opérateur de jeux d'argent, ni un intermédiaire de paris, et n'encaisse aucune mise.</p>
+      <ul>
+        <li>Les paris sportifs comportent un risque de perte financière réelle et peuvent entraîner une dépendance.</li>
+        <li>Aucun gain n'est garanti. Une "value" mathématique est une estimation, pas une certitude de résultat.</li>
+        <li>Les performances passées ne préjugent pas des performances futures.</li>
+        <li>Chaque abonné reste seul décisionnaire et responsable de ses paris.</li>
+        <li>Si le jeu devient un problème pour vous ou un proche : <strong>09 74 75 13 13</strong> (appel non surtaxé, 7j/7).</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFS -->
+<section id="tarifs">
+  <div class="container">
+    <span class="section-tag">// Abonnement</span>
+    <h2>Tarifs</h2>
+    <p class="section-intro">Un seul abonnement, deux modules inclus. Sans engagement au-delà de la période réglée, résiliable à tout moment.</p>
+    <div class="pricing-grid">
+      <div class="price-card featured">
+        <span class="flag">Meilleur tarif</span>
+        <h3>Mensuel — Direct</h3>
+        <div class="price">80€<small>/mois</small></div>
+        <p class="price-note">En réglant en direct par email (virement / moyen convenu)</p>
+        <ul>
+          <li>Analyses & pronostics basketball</li>
+          <li>Alertes cotes boostées value (ANJ)</li>
+          <li>Historique transparent complet</li>
+          <li>Sans engagement, résiliable chaque mois</li>
+        </ul>
+        <a href="#contact" class="btn btn-primary">Choisir cette formule</a>
+      </div>
+      <div class="price-card">
+        <h3>Mensuel — Stripe</h3>
+        <div class="price">85€<small>/mois</small></div>
+        <p class="price-note">Paiement sécurisé par carte bancaire via Stripe, renouvellement automatique</p>
+        <ul>
+          <li>Contenu identique à la formule directe</li>
+          <li>Paiement CB 100 % sécurisé</li>
+          <li>Gestion de l'abonnement en autonomie</li>
+          <li>Annulation en un clic à tout moment</li>
+        </ul>
+        <a href="#contact" class="btn btn-ghost">Choisir cette formule</a>
+      </div>
+      <div class="price-card">
+        <h3>Annuel</h3>
+        <div class="price">Sur devis<small></small></div>
+        <p class="price-note">Règlement annuel possible à tarif préférentiel — sur demande par email</p>
+        <ul>
+          <li>Contenu identique aux formules mensuelles</li>
+          <li>Un seul règlement pour 12 mois</li>
+          <li>Tarif préférentiel négocié en direct</li>
+          <li>Paiement direct ou via Stripe</li>
+        </ul>
+        <a href="mailto:betpro01@proton.me?subject=Abonnement%20annuel%20TradeBET" class="btn btn-ghost">Demander un devis</a>
+      </div>
+    </div>
+    <p class="pricing-legal">L'abonnement donne accès à un contenu d'analyse et d'information. Il ne constitue en aucun cas un placement, un investissement ou une promesse de revenus. Le coût de l'abonnement s'ajoute aux éventuelles pertes de paris : intégrez-le dans votre budget loisir. Interdit aux mineurs.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <span class="section-tag">// Questions fréquentes</span>
+    <h2>FAQ</h2>
+    <div style="margin-top:36px">
+      <details>
+        <summary>Est-ce que je vais gagner de l'argent avec TradeBET ?</summary>
+        <div class="faq-body">Personne ne peut le promettre sérieusement — et TradeBET refuse de le faire. Les paris sportifs comportent un risque de perte, y compris en suivant des analyses rigoureuses. Le travail consiste à identifier des paris dont la cote semble supérieure à la probabilité réelle de l'événement — ce qui n'empêche jamais de perdre sur une série, voire sur une période prolongée. Ne pariez jamais d'argent dont vous avez besoin.</div>
+      </details>
+      <details>
+        <summary>Qu'est-ce qu'une cote boostée "value" ?</summary>
+        <div class="faq-body">Les bookmakers proposent régulièrement des cotes augmentées à des fins promotionnelles. Quand la cote boostée dépasse la cote "juste" du marché, le pari présente une espérance mathématique positive : c'est une value objective, mesurable. Cela améliore les probabilités sur le long terme mais ne garantit aucun résultat sur un pari donné.</div>
+      </details>
+      <details>
+        <summary>Sur quels bookmakers fonctionnent vos alertes ?</summary>
+        <div class="faq-body">Exclusivement sur les opérateurs de paris sportifs agréés par l'ANJ (Autorité Nationale des Jeux) en France. Aucune offre de site non agréé n'est relayée : leur usage est illégal en France.</div>
+      </details>
+      <details>
+        <summary>Comment fonctionne la gestion de bankroll conseillée ?</summary>
+        <div class="faq-body">Chaque sélection est accompagnée d'une mise conseillée exprimée en pourcentage de votre bankroll dédiée au jeu (généralement 1 à 3 %). Cette bankroll doit être un budget loisir, distinct de vos finances essentielles, et dont la perte totale ne mettrait pas en difficulté votre quotidien.</div>
+      </details>
+      <details>
+        <summary>Puis-je résilier quand je veux ?</summary>
+        <div class="faq-body">Oui. L'abonnement mensuel est sans engagement : il s'arrête à la fin de la période réglée, sur simple demande (formule directe) ou en un clic (Stripe). Aucune pénalité, aucune justification demandée.</div>
+      </details>
+      <details>
+        <summary>Que faire si je sens que le jeu devient un problème ?</summary>
+        <div class="faq-body">Arrêtez de parier et parlez-en. Joueurs Info Service est joignable 7j/7 au 09 74 75 13 13 (appel non surtaxé) et sur joueurs-info-service.fr. Vous pouvez aussi demander votre interdiction volontaire de jeux auprès de l'ANJ, activer les auto-limitations chez les bookmakers, ou demander la suspension de votre abonnement TradeBET — elle sera appliquée immédiatement, sans discuter.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="final-cta" id="contact">
+  <div class="container">
+    <div class="box">
+      <h2>Prêt à parier <span style="background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent">plus intelligemment ?</span></h2>
+      <p style="color:var(--muted);max-width:520px;margin:16px auto 32px;line-height:1.7">Rejoignez TradeBET pour une approche analytique et responsable du pari basketball. Pas de rêve vendu — de la méthode, de la transparence, et du basket.</p>
+      <div class="cta-row">
+        <a href="mailto:betpro01@proton.me?subject=Abonnement%20TradeBET" class="btn btn-primary">S'abonner par email</a>
+      </div>
+      <p style="margin-top:18px;font-size:.95rem"><a href="mailto:betpro01@proton.me" style="color:var(--cyan);text-decoration:none;font-weight:600">betpro01@proton.me</a></p>
+      <p style="color:#6b7192;font-size:.78rem;margin-top:16px">Réservé aux personnes majeures · Jouer comporte des risques</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRÉVENTION -->
+<div class="prevention">
+  <div class="container">
+    <h3><span class="badge-18">18+</span> Jeu responsable — informations obligatoires</h3>
+    <p><strong>Jouer comporte des risques : endettement, isolement, dépendance.</strong> Les jeux d'argent et de hasard sont interdits aux mineurs. Le jeu doit rester un loisir : fixez-vous des limites de temps et d'argent, ne jouez jamais pour vous refaire, et ne misez que des sommes dont la perte n'affecterait pas votre quotidien.</p>
+    <div class="helpline">
+      📞 09 74 75 13 13
+      <small>Joueurs Info Service — appel non surtaxé, 7j/7 de 8h à 2h</small>
+    </div>
+    <p>Aide et accompagnement : <a href="https://www.joueurs-info-service.fr" target="_blank" rel="noopener">joueurs-info-service.fr</a> · Évaluez votre pratique : <a href="https://www.evalujeu.fr" target="_blank" rel="noopener">evalujeu.fr</a> · Interdiction volontaire de jeux : <a href="https://www.anj.fr" target="_blank" rel="noopener">anj.fr</a></p>
+    <p>TradeBET encourage l'utilisation des outils de modération proposés par les opérateurs agréés ANJ : limites de dépôt, limites de mises, auto-exclusion temporaire ou définitive.</p>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p>© 2026 TradeBET — Alan Pratt, entrepreneur individuel · SIRET 949 171 078 00023 · Service d'analyses et d'informations sportives. TradeBET n'est pas un opérateur de jeux d'argent et n'est pas affilié à l'ANJ ni aux bookmakers cités. Aucun gain n'est garanti ; les performances passées ne préjugent pas des performances futures. Les analyses portent exclusivement sur les opérateurs agréés par l'Autorité Nationale des Jeux (ANJ). Interdit aux moins de 18 ans.</p>
+    <p style="margin-top:12px"><a href="mentions-legales.html" style="color:#8a91ad">Mentions légales</a> &nbsp;·&nbsp; <a href="cgv.html" style="color:#8a91ad">Conditions Générales de Vente</a> &nbsp;·&nbsp; <a href="mailto:betpro01@proton.me" style="color:#8a91ad">betpro01@proton.me</a></p>
+  </div>
+</footer>
+
+</body>
+</html>

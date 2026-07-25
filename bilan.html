@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeBET — Bilan Saison NBA 2025-26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05060f;
+  --bg2:#0a0d1f;
+  --glass:rgba(255,255,255,.04);
+  --stroke:rgba(120,140,255,.22);
+  --stroke-hi:rgba(34,211,238,.45);
+  --txt:#e6e9f5;
+  --dim:#8a91ad;
+  --cyan:#22d3ee;
+  --orange:#fb923c;
+  --green:#34d399;
+  --red:#f87171;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--txt);
+  font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 500px at 80% -10%, rgba(34,211,238,.07), transparent 60%),
+    radial-gradient(800px 500px at 10% 20%, rgba(251,146,60,.06), transparent 60%);
+}
+.grid-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:linear-gradient(rgba(120,140,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(120,140,255,.05) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(#000 60%,transparent);
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+.mono{font-family:'JetBrains Mono',monospace}
+.disp{font-family:'Space Grotesk',sans-serif}
+.pos{color:var(--green)}
+.neg{color:var(--red)}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(5,6,15,.82);border-bottom:1px solid var(--stroke)}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:15px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:36px;height:36px;flex:none;position:relative;background:conic-gradient(from 180deg,var(--orange),#fdba74,var(--orange));clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.logo::after{content:"";position:absolute;inset:3px;background:var(--bg);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.logo span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--orange);z-index:1}
+.brand-name{font-family:'Space Grotesk';font-weight:700;font-size:20px;letter-spacing:.1em;text-transform:uppercase}
+.brand-name b{color:var(--orange);font-weight:700}
+.hd-right{text-align:right}
+.hd-tag{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
+.hd-period{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 26px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);border:1px solid var(--stroke);border-radius:3px;padding:7px 14px;background:var(--glass)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(44px,7vw,86px);line-height:1;letter-spacing:.01em;text-transform:uppercase;margin-top:22px}
+.hero h1 .glow{color:var(--orange);text-shadow:0 0 34px rgba(251,146,60,.55)}
+.hero h1 small{display:block;font-size:.42em;color:var(--dim);letter-spacing:.14em;font-weight:600;margin-top:10px}
+.hero-sub{margin-top:18px;max-width:560px;color:#b6bcd4;font-size:15px}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:40px}
+.kpi{position:relative;background:var(--glass);border:1px solid var(--stroke);padding:18px 18px 15px;backdrop-filter:blur(8px)}
+.kpi::before,.kpi::after{content:"";position:absolute;width:14px;height:14px;border:1.5px solid var(--stroke-hi)}
+.kpi::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.kpi::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.kpi .v{font-family:'Space Grotesk';font-weight:700;font-size:34px;line-height:1;letter-spacing:.01em}
+.kpi .l{font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:8px}
+.kpi .s{font-family:'JetBrains Mono';font-size:10px;color:var(--dim);margin-top:3px}
+.kpi .v.o{color:var(--orange)}
+.kpi .v.c{color:var(--cyan)}
+.kpi .v.g{color:var(--green)}
+
+/* ---------- curve ---------- */
+.curve-block{margin-top:48px;background:linear-gradient(180deg,rgba(15,18,35,.9),rgba(7,8,24,.9));border:1px solid var(--stroke);position:relative;padding:26px 0 0;overflow:hidden}
+.curve-block::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(120,140,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(120,140,255,.06) 1px,transparent 1px);background-size:36px 36px;pointer-events:none}
+.curve-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 26px 14px;position:relative}
+.curve-title{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.curve-live{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.curve-block svg{display:block;width:100%;height:auto;position:relative}
+.curve-cap{display:grid;grid-template-columns:repeat(9,1fr);font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;padding:12px 26px 18px;border-top:1px solid var(--stroke);position:relative}
+.curve-cap span{text-align:center}
+
+/* ---------- sections ---------- */
+section{padding:64px 0 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.sec-num{font-family:'JetBrains Mono';font-size:11px;color:var(--orange);letter-spacing:.14em}
+h2{font-family:'Space Grotesk';font-weight:700;font-size:26px;letter-spacing:.06em;text-transform:uppercase}
+h2::after{content:"_";color:var(--cyan);animation:blink 1.4s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sec-note{margin-left:auto;font-family:'JetBrains Mono';font-size:11px;color:var(--dim);letter-spacing:.06em}
+
+/* table */
+.tbl-wrap{border:1px solid var(--stroke);background:var(--glass);backdrop-filter:blur(8px);overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;min-width:640px}
+.tbl th{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);text-align:right;padding:14px 18px;border-bottom:1px solid var(--stroke-hi);font-weight:500}
+.tbl th:first-child{text-align:left}
+.tbl td{font-family:'JetBrains Mono';font-size:13px;text-align:right;padding:11px 18px;border-bottom:1px solid rgba(120,140,255,.12)}
+.tbl td:first-child{text-align:left;font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.tbl tbody tr{transition:background .15s}
+.tbl tbody tr:hover{background:rgba(34,211,238,.05)}
+.tbl tr.total td{border-top:1px solid var(--stroke-hi);background:rgba(251,146,60,.06);font-weight:700}
+.badge{display:inline-block;min-width:78px;text-align:center;padding:3px 10px;border-radius:2px;font-weight:700;font-size:12.5px}
+.badge.p{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.35)}
+.badge.n{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.35)}
+.wr{display:inline-flex;align-items:center;gap:9px;justify-content:flex-end}
+.wr i{width:54px;height:4px;background:rgba(138,145,173,.25);border-radius:2px;overflow:hidden;display:inline-block}
+.wr i b{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),#67e8f9);border-radius:2px}
+
+/* breakdown cards */
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.card{position:relative;background:var(--glass);border:1px solid var(--stroke);padding:22px;backdrop-filter:blur(8px)}
+.card::before{content:"";position:absolute;top:0;left:0;width:44px;height:2px;background:var(--orange);box-shadow:0 0 12px rgba(251,146,60,.6)}
+.card h3{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.card .sub{font-size:12px;color:var(--dim);margin-bottom:16px}
+.row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(120,140,255,.12)}
+.row:last-of-type{border-bottom:none}
+.row .lab{font-size:13px;flex:1}
+.row .meta{font-family:'JetBrains Mono';font-size:10px;color:var(--dim);min-width:54px;text-align:right}
+.row .val{font-family:'JetBrains Mono';font-size:12.5px;min-width:62px;text-align:right;font-weight:700}
+.card p.note{margin-top:14px;font-size:12.5px;color:var(--dim);line-height:1.55}
+
+/* risk */
+.disc{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.disc .card .v{font-family:'Space Grotesk';font-weight:700;font-size:28px}
+.disc .card .l{font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+.disc .card p{font-size:12.5px;color:var(--dim);margin-top:10px;line-height:1.55}
+
+/* method */
+.method{margin-top:64px;border:1px solid var(--stroke);background:linear-gradient(135deg,rgba(251,146,60,.07),rgba(34,211,238,.05)),var(--glass);padding:34px 36px;display:grid;grid-template-columns:1fr 1fr;gap:36px;backdrop-filter:blur(8px)}
+.method h3{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+.method h3::before{content:"// ";color:var(--orange)}
+.method p{font-size:13.5px;color:#b6bcd4}
+.method .mark{color:var(--txt);font-weight:600}
+
+footer{border-top:1px solid var(--stroke);margin-top:64px;padding:26px 0 44px;font-size:11.5px;color:var(--dim)}
+footer .f{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+footer .age{font-family:'JetBrains Mono';border:1.5px solid var(--dim);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:11px;flex:none}
+
+@media (max-width:840px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid-3,.disc{grid-template-columns:1fr}
+  .method{grid-template-columns:1fr;padding:26px}
+  .curve-cap{font-size:8.5px;padding:10px 12px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .eyebrow::before,h2::after{animation:none}
+}
+
+/* ---------- harmonisation TradeBET ---------- */
+.kpi,.card,.tbl-wrap,.curve-block,.method{border-radius:18px;overflow:hidden}
+.kpi::before,.kpi::after{display:none}
+.eyebrow,.badge{border-radius:100px}
+h2::after{content:"";animation:none}
+.brand-name b{font-weight:700}
+header{background:rgba(5,6,15,.82)}
+.tbl th:first-child,.tbl td:first-child{font-family:'Space Grotesk',sans-serif}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap hd">
+    <div class="brand">
+      <div>
+        <div class="brand-name">TRADE<b style="background:linear-gradient(90deg,#22d3ee,#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent">BET</b></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.24em;color:#8a91ad;text-transform:uppercase;margin-top:2px">NBAnalytics &middot; Track record</div>
+      </div>
+    </div>
+    <div class="hd-right">
+      <div class="hd-tag">Track record · 100% vérifié</div>
+      <div class="hd-period">Saison NBA 2025–26</div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <a href="index.html" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#22d3ee;text-decoration:none;letter-spacing:.16em;text-transform:uppercase;display:inline-block;margin-bottom:18px">&#8592; Retour &agrave; l'accueil TradeBET</a><br>
+    <span class="eyebrow">Player Props NBA · 22 oct. 2025 → 14 juin 2026</span>
+    <h1><span class="glow">+47,84 unités</span><small>sur l'intégralité de la saison — regular season & playoffs</small></h1>
+    <p class="hero-sub">837 paris trackés, horodatés avant chaque match, réglés automatiquement. Aucune sélection retirée, aucun résultat maquillé : la courbe ci-dessous, c'est tout l'historique.</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="v c">837</div><div class="l">Paris trackés</div><div class="s">806 réglés · 31 void*</div></div>
+      <div class="kpi"><div class="v g">+6,78&nbsp;%</div><div class="l">ROI (Yield)</div><div class="s">sur 705u misées</div></div>
+      <div class="kpi"><div class="v">58,4&nbsp;%</div><div class="l">Réussite</div><div class="s">471 V — 335 D</div></div>
+      <div class="kpi"><div class="v o">1,84</div><div class="l">Cote moyenne</div><div class="s">de 1,49 à 2,66</div></div>
+      <div class="kpi"><div class="v">0,87u</div><div class="l">Mise moyenne</div><div class="s">plafond : 1,5u</div></div>
+    </div>
+
+    <div class="curve-block">
+      <div class="curve-head">
+        <span class="curve-title">Évolution des unités — saison complète</span>
+        <span class="curve-live">806 paris réglés · unité = 1u</span>
+      </div>
+      <svg id="chart" viewBox="0 0 1100 380" role="img" aria-label="Courbe cumulée des unités gagnées sur la saison, de 0 à +47,84 unités"></svg>
+      <div class="curve-cap">
+        <span>Oct</span><span>Nov</span><span>Déc</span><span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Juin</span>
+      </div>
+    </div>
+    <p style="font-family:'JetBrains Mono';font-size:10.5px;color:var(--dim);margin-top:10px">* void = paris annulés par le bookmaker (match reporté, joueur forfait) — mise remboursée, conservés dans l'historique par transparence.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">[01]</span>
+      <h2>Box score mensuel</h2>
+      <span class="sec-note">unités (u) — mise de référence : 1u</span>
+    </div>
+    <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>Mois</th><th>Paris</th><th>Misé</th><th>Réussite</th><th>+/− Unités</th><th>ROI</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Oct. 2025</td><td>63</td><td>57,50u</td><td><span class="wr"><i><b style="width:56%"></b></i>55,6&nbsp;%</span></td><td><span class="badge p">+1,52</span></td><td class="pos">+2,6&nbsp;%</td></tr>
+        <tr><td>Nov. 2025</td><td>220</td><td>195,50u</td><td><span class="wr"><i><b style="width:58%"></b></i>58,2&nbsp;%</span></td><td><span class="badge p">+11,57</span></td><td class="pos">+5,9&nbsp;%</td></tr>
+        <tr><td>Déc. 2025</td><td>156</td><td>141,00u</td><td><span class="wr"><i><b style="width:54%"></b></i>54,5&nbsp;%</span></td><td><span class="badge n">−1,63</span></td><td class="neg">−1,2&nbsp;%</td></tr>
+        <tr><td>Janv. 2026</td><td>69</td><td>62,00u</td><td><span class="wr"><i><b style="width:54%"></b></i>53,6&nbsp;%</span></td><td><span class="badge n">−2,74</span></td><td class="neg">−4,4&nbsp;%</td></tr>
+        <tr><td>Févr. 2026</td><td>58</td><td>44,00u</td><td><span class="wr"><i><b style="width:53%"></b></i>53,4&nbsp;%</span></td><td><span class="badge n">−1,89</span></td><td class="neg">−4,3&nbsp;%</td></tr>
+        <tr><td>Mars 2026</td><td>76</td><td>69,00u</td><td><span class="wr"><i><b style="width:62%"></b></i>61,8&nbsp;%</span></td><td><span class="badge p">+11,97</span></td><td class="pos">+17,4&nbsp;%</td></tr>
+        <tr><td>Avr. 2026</td><td>84</td><td>70,50u</td><td><span class="wr"><i><b style="width:67%"></b></i>66,7&nbsp;%</span></td><td><span class="badge p">+16,29</span></td><td class="pos">+23,1&nbsp;%</td></tr>
+        <tr><td>Mai 2026</td><td>55</td><td>49,00u</td><td><span class="wr"><i><b style="width:71%"></b></i>70,9&nbsp;%</span></td><td><span class="badge p">+13,16</span></td><td class="pos">+26,9&nbsp;%</td></tr>
+        <tr><td>Juin 2026</td><td>25</td><td>16,75u</td><td><span class="wr"><i><b style="width:52%"></b></i>52,0&nbsp;%</span></td><td><span class="badge n">−0,41</span></td><td class="neg">−2,4&nbsp;%</td></tr>
+        <tr class="total"><td>Saison</td><td>806</td><td>705,25u</td><td><span class="wr"><i><b style="width:58%"></b></i>58,4&nbsp;%</span></td><td><span class="badge p">+47,84</span></td><td class="pos">+6,8&nbsp;%</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">[02]</span>
+      <h2>D'où vient la performance</h2>
+      <span class="sec-note">ROI par segment · 806 paris réglés</span>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Par marché</h3>
+        <div class="sub">Spécialité : totaux de points joueur</div>
+        <div class="row"><span class="lab">Points joueur</span><span class="meta">648</span><span class="val pos">+6,9&nbsp;%</span></div>
+        <div class="row"><span class="lab">Passes</span><span class="meta">39</span><span class="val pos">+9,7&nbsp;%</span></div>
+        <div class="row"><span class="lab">Pts + Reb + Ast</span><span class="meta">27</span><span class="val pos">+7,1&nbsp;%</span></div>
+        <div class="row"><span class="lab">Rebonds</span><span class="meta">31</span><span class="val pos">+3,4&nbsp;%</span></div>
+        <div class="row"><span class="lab">3-points</span><span class="meta">9</span><span class="val pos">+40,3&nbsp;%</span></div>
+        <div class="row"><span class="lab">Autres</span><span class="meta">52</span><span class="val neg">−2,0&nbsp;%</span></div>
+      </div>
+      <div class="card">
+        <h3>Par tranche de cotes</h3>
+        <div class="sub">Rentable sur toutes les tranches jouées</div>
+        <div class="row"><span class="lab">1,40 – 1,70</span><span class="meta">73</span><span class="val pos">+3,6&nbsp;%</span></div>
+        <div class="row"><span class="lab">1,70 – 1,85</span><span class="meta">411</span><span class="val pos">+8,3&nbsp;%</span></div>
+        <div class="row"><span class="lab">1,85 – 2,00</span><span class="meta">284</span><span class="val pos">+2,9&nbsp;%</span></div>
+        <div class="row"><span class="lab">2,00 et +</span><span class="meta">38</span><span class="val pos">+26,7&nbsp;%</span></div>
+        <p class="note">Le cœur du volume (1,70–1,85) est aussi le plus solide : pas de dépendance aux grosses cotes.</p>
+      </div>
+      <div class="card">
+        <h3>Under vs Over</h3>
+        <div class="sub">Un angle assumé : la valeur est sur l'Under</div>
+        <div class="row"><span class="lab">Under</span><span class="meta">698</span><span class="val pos">+7,1&nbsp;%</span></div>
+        <div class="row"><span class="lab">Over</span><span class="meta">106</span><span class="val pos">+3,8&nbsp;%</span></div>
+        <p class="note">87&nbsp;% du volume est joué à l'Under sur les lignes de joueurs — là où le marché, tiré par le public, surcote régulièrement les performances offensives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">[03]</span>
+      <h2>Gestion du risque</h2>
+      <span class="sec-note">la rentabilité ne vaut rien sans discipline</span>
+    </div>
+    <div class="disc">
+      <div class="card">
+        <div class="v">0,25 – 1,5u</div><div class="l">Fourchette de mises</div>
+        <p>Mise moyenne : 0,87u. Sizing plafonné — aucun «&nbsp;all-in&nbsp;», aucune martingale.</p>
+      </div>
+      <div class="card">
+        <div class="v neg">−16,6u</div><div class="l">Drawdown maximum</div>
+        <p>Pire creux de la saison (déc.–févr.), entièrement absorbé et dépassé dès mars.</p>
+      </div>
+      <div class="card">
+        <div class="v">10 / 8</div><div class="l">Séries max (V / D)</div>
+        <p>Les séries de défaites font partie du jeu ; le stake plan est conçu pour les encaisser.</p>
+      </div>
+      <div class="card">
+        <div class="v">806</div><div class="l">Échantillon</div>
+        <p>Un volume qui permet de juger la méthode sur la durée, pas sur un mois chanceux.</p>
+      </div>
+    </div>
+
+    <div class="method">
+      <div>
+        <h3>La méthode</h3>
+        <p>Modélisation statistique des performances individuelles NBA (minutes projetées, matchups, rythme des équipes, contexte de blessures), confrontée aux lignes des bookmakers. Un pari n'est envoyé que lorsque l'écart entre notre projection et la ligne dépasse notre seuil de valeur — <span class="mark">en moyenne 3 à 4 sélections par soirée de matchs</span>.</p>
+      </div>
+      <div>
+        <h3>La transparence</h3>
+        <p>Chaque sélection est horodatée avant le début du match : cote prise, cote d'ouverture et cote de clôture sont archivées. Les 31 paris annulés (matchs reportés, joueurs forfaits) restent visibles dans l'historique. <span class="mark">Le fichier brut est consultable sur demande.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap f">
+    <div style="max-width:680px">
+      <strong style="color:var(--txt)">Avertissement.</strong> Les performances passées ne préjugent pas des performances futures. Les paris sportifs comportent un risque de perte financière : ne misez que ce que vous pouvez vous permettre de perdre. Jouer comporte des risques : endettement, isolement, dépendance. Pour être aidé, appelez le 09&nbsp;74&nbsp;75&nbsp;13&nbsp;13 (appel non surtaxé).
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="age">18+</div>
+      <div>TradeBET · Saison 2025–26<br>Interdit aux mineurs</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const data = [-0.5,-1.25,4.14,4.04,4.07,4.57,-0.12,0.94,3.78,1.3,1.67,1.14,2.25,1.68,2.24,3.62,3.46,1.15,3.23,4.53,3.3,0.32,1.44,3.52,4.44,3.62,6.93,2.9,3.88,7.45,7.45,8.98,7.75,9.14,6.37,8.02,9.89,10.71,7.88,6.55,11.3,10.58,9.22,7.44,7.51,10.94,9.98,13.09,14.43,17.22,18.67,17.58,19.0,15.18,19.79,15.59,12.46,11.03,9.04,8.21,7.76,10.78,11.46,9.21,6.97,9.64,11.78,15.04,12.54,10.73,11.49,12.76,13.88,11.46,12.86,8.67,9.67,9.77,11.04,8.75,6.52,5.85,7.24,6.29,7.17,9.45,10.32,12.84,13.32,11.63,11.96,8.33,10.75,8.55,7.83,5.93,5.59,7.46,5.41,6.6,7.8,9.61,11.6,11.31,14.11,16.69,14.8,19.57,20.82,20.85,22.8,22.37,24.61,27.4,26.47,29.67,30.44,32.06,34.99,31.17,30.76,35.9,38.83,41.0,42.95,44.34,47.01,47.86,47.35,47.15,48.25,48.54,48.6,48.48,47.05,47.84];
+  const svg = document.getElementById('chart');
+  const W = 1100, H = 380, padT = 30, padB = 20, padL = 68, padR = 130;
+  const min = Math.min(...data, 0), max = Math.max(...data) + 3;
+  const x = i => padL + i/(data.length-1)*(W-padL-padR);
+  const y = v => padT + (1-(v-min)/(max-min))*(H-padT-padB);
+  const ns = 'http://www.w3.org/2000/svg';
+  const el = (t,a)=>{const e=document.createElementNS(ns,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+
+  const defs = el('defs',{});
+  defs.innerHTML =
+    '<linearGradient id="g" x1="0" y1="0" x2="0" y2="1">'+
+      '<stop offset="0" stop-color="#fb923c" stop-opacity="0.32"/>'+
+      '<stop offset="1" stop-color="#fb923c" stop-opacity="0"/>'+
+    '</linearGradient>'+
+    '<linearGradient id="ln" x1="0" y1="0" x2="1" y2="0">'+
+      '<stop offset="0" stop-color="#22d3ee"/>'+
+      '<stop offset="1" stop-color="#fb923c"/>'+
+    '</linearGradient>'+
+    '<filter id="glow" x="-30%" y="-30%" width="160%" height="160%">'+
+      '<feGaussianBlur stdDeviation="4" result="b"/>'+
+      '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>'+
+    '</filter>';
+  svg.appendChild(defs);
+
+  // horizontal gridlines with big readable labels
+  [0,10,20,30,40,50].forEach(v=>{
+    if (v > max) return;
+    svg.appendChild(el('line',{x1:padL,x2:W-padR+30,y1:y(v),y2:y(v),stroke:'rgba(120,140,255,.28)','stroke-width':1,'stroke-dasharray':v===0?'none':'3 6'}));
+    const t = el('text',{x:padL-12,y:y(v)+4,fill:v===0?'#8a91ad':'#9aa3c0','font-size':14,'font-family':'JetBrains Mono','font-weight':v?500:400,'text-anchor':'end'});
+    t.textContent = (v>0?'+':'')+v+'u';
+    svg.appendChild(t);
+  });
+
+  let line='', area='M'+x(0)+' '+y(0);
+  data.forEach((v,i)=>{ const p=x(i).toFixed(1)+' '+y(v).toFixed(1); line+=(i?' L':'M')+p; area+=' L'+p; });
+  area += ' L'+x(data.length-1)+' '+y(0)+' Z';
+
+  svg.appendChild(el('path',{d:area,fill:'url(#g)'}));
+  const path = el('path',{d:line,fill:'none',stroke:'url(#ln)','stroke-width':3,'stroke-linejoin':'round','stroke-linecap':'round',filter:'url(#glow)'});
+  svg.appendChild(path);
+
+  // peak marker
+  const pk = data.indexOf(Math.max(...data));
+  svg.appendChild(el('circle',{cx:x(pk),cy:y(data[pk]),r:3.5,fill:'#22d3ee'}));
+  const pt = el('text',{x:x(pk),y:y(data[pk])-12,fill:'#22d3ee','font-size':13,'font-family':'JetBrains Mono','text-anchor':'middle'});
+  pt.textContent = 'pic +'+data[pk].toFixed(2).replace('.',',')+'u';
+  svg.appendChild(pt);
+
+  // end marker + BIG final label
+  const lx = x(data.length-1), ly = y(data[data.length-1]);
+  svg.appendChild(el('line',{x1:lx,x2:W-padR+120,y1:ly,y2:ly,stroke:'#fb923c','stroke-width':1,'stroke-dasharray':'2 4','stroke-opacity':.7}));
+  svg.appendChild(el('circle',{cx:lx,cy:ly,r:6,fill:'#fb923c',filter:'url(#glow)'}));
+  svg.appendChild(el('circle',{cx:lx,cy:ly,r:11,fill:'none',stroke:'#fb923c','stroke-opacity':.5,'stroke-width':1.5}));
+  const box = el('rect',{x:lx+16,y:ly-24,width:104,height:46,rx:3,fill:'rgba(251,146,60,.12)',stroke:'#fb923c','stroke-width':1});
+  svg.appendChild(box);
+  const lbl = el('text',{x:lx+68,y:ly+3,fill:'#fdba74','font-size':24,'font-family':'Space Grotesk','font-weight':700,'text-anchor':'middle'});
+  lbl.textContent = '+47,84u';
+  svg.appendChild(lbl);
+  const lbl2 = el('text',{x:lx+68,y:ly+17,fill:'#8a91ad','font-size':9.5,'font-family':'JetBrains Mono','text-anchor':'middle','letter-spacing':'1'});
+  lbl2.textContent = 'BILAN FINAL';
+  svg.appendChild(lbl2);
+
+  // draw-in animation (respect reduced motion)
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    path.getBoundingClientRect();
+    path.style.transition = 'stroke-dashoffset 2s ease-out';
+    requestAnimationFrame(()=>{ path.style.strokeDashoffset = 0; });
+  }
+})();
+</script>
+</body>
+</html>

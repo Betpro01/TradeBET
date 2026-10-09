@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TradeBET — Bilan Saison NBA 2025-26</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05060f;
+  --bg2:#0a0d1f;
+  --glass:rgba(255,255,255,.04);
+  --stroke:rgba(120,140,255,.22);
+  --stroke-hi:rgba(34,211,238,.45);
+  --txt:#e6e9f5;
+  --dim:#8a91ad;
+  --cyan:#22d3ee;
+  --orange:#fb923c;
+  --green:#34d399;
+  --red:#f87171;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--bg);color:var(--txt);
+  font-family:'Inter',sans-serif;font-size:15px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 500px at 80% -10%, rgba(34,211,238,.07), transparent 60%),
+    radial-gradient(800px 500px at 10% 20%, rgba(251,146,60,.06), transparent 60%);
+}
+.grid-bg{
+  position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:linear-gradient(rgba(120,140,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(120,140,255,.05) 1px,transparent 1px);
+  background-size:44px 44px;
+  mask-image:linear-gradient(#000 60%,transparent);
+}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px;position:relative;z-index:1}
+.mono{font-family:'JetBrains Mono',monospace}
+.disp{font-family:'Space Grotesk',sans-serif}
+.pos{color:var(--green)}
+.neg{color:var(--red)}
+
+/* ---------- header ---------- */
+header{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:rgba(5,6,15,.82);border-bottom:1px solid var(--stroke)}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:15px 0}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:36px;height:36px;flex:none;position:relative;background:conic-gradient(from 180deg,var(--orange),#fdba74,var(--orange));clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.logo::after{content:"";position:absolute;inset:3px;background:var(--bg);clip-path:polygon(50% 0,100% 25%,100% 75%,50% 100%,0 75%,0 25%);}
+.logo span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk';font-weight:700;font-size:15px;color:var(--orange);z-index:1}
+.brand-name{font-family:'Space Grotesk';font-weight:700;font-size:20px;letter-spacing:.1em;text-transform:uppercase}
+.brand-name b{color:var(--orange);font-weight:700}
+.hd-right{text-align:right}
+.hd-tag{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan)}
+.hd-period{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.06em;text-transform:uppercase}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 26px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-family:'JetBrains Mono';font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim);border:1px solid var(--stroke);border-radius:3px;padding:7px 14px;background:var(--glass)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2.2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.hero h1{font-family:'Space Grotesk';font-weight:700;font-size:clamp(44px,7vw,86px);line-height:1;letter-spacing:.01em;text-transform:uppercase;margin-top:22px}
+.hero h1 .glow{color:var(--orange);text-shadow:0 0 34px rgba(251,146,60,.55)}
+.hero h1 small{display:block;font-size:.42em;color:var(--dim);letter-spacing:.14em;font-weight:600;margin-top:10px}
+.hero-sub{margin-top:18px;max-width:560px;color:#b6bcd4;font-size:15px}
+
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:40px}
+.kpi{position:relative;background:var(--glass);border:1px solid var(--stroke);padding:18px 18px 15px;backdrop-filter:blur(8px)}
+.kpi::before,.kpi::after{content:"";position:absolute;width:14px;height:14px;border:1.5px solid var(--stroke-hi)}
+.kpi::before{top:-1px;left:-1px;border-right:none;border-bottom:none}
+.kpi::after{bottom:-1px;right:-1px;border-left:none;border-top:none}
+.kpi .v{font-family:'Space Grotesk';font-weight:700;font-size:34px;line-height:1;letter-spacing:.01em}
+.kpi .l{font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:8px}
+.kpi .s{font-family:'JetBrains Mono';font-size:10px;color:var(--dim);margin-top:3px}
+.kpi .v.o{color:var(--orange)}
+.kpi .v.c{color:var(--cyan)}
+.kpi .v.g{color:var(--green)}
+
+/* ---------- curve ---------- */
+.curve-block{margin-top:48px;background:linear-gradient(180deg,rgba(15,18,35,.9),rgba(7,8,24,.9));border:1px solid var(--stroke);position:relative;padding:26px 0 0;overflow:hidden}
+.curve-block::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(120,140,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(120,140,255,.06) 1px,transparent 1px);background-size:36px 36px;pointer-events:none}
+.curve-head{display:flex;justify-content:space-between;align-items:baseline;padding:0 26px 14px;position:relative}
+.curve-title{font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+.curve-live{font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.curve-block svg{display:block;width:100%;height:auto;position:relative}
+.curve-cap{display:grid;grid-template-columns:repeat(9,1fr);font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.12em;color:var(--dim);text-transform:uppercase;padding:12px 26px 18px;border-top:1px solid var(--stroke);position:relative}
+.curve-cap span{text-align:center}
+
+/* ---------- sections ---------- */
+section{padding:64px 0 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:26px;flex-wrap:wrap}
+.sec-num{font-family:'JetBrains Mono';font-size:11px;color:var(--orange);letter-spacing:.14em}
+h2{font-family:'Space Grotesk';font-weight:700;font-size:26px;letter-spacing:.06em;text-transform:uppercase}
+h2::after{content:"_";color:var(--cyan);animation:blink 1.4s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.sec-note{margin-left:auto;font-family:'JetBrains Mono';font-size:11px;color:var(--dim);letter-spacing:.06em}
+
+/* table */
+.tbl-wrap{border:1px solid var(--stroke);background:var(--glass);backdrop-filter:blur(8px);overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;min-width:640px}
+.tbl th{font-family:'JetBrains Mono';font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);text-align:right;padding:14px 18px;border-bottom:1px solid var(--stroke-hi);font-weight:500}
+.tbl th:first-child{text-align:left}
+.tbl td{font-family:'JetBrains Mono';font-size:13px;text-align:right;padding:11px 18px;border-bottom:1px solid rgba(120,140,255,.12)}
+.tbl td:first-child{text-align:left;font-family:'Space Grotesk';font-weight:600;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.tbl tbody tr{transition:background .15s}
+.tbl tbody tr:hover{background:rgba(34,211,238,.05)}
+.tbl tr.total td{border-top:1px solid var(--stroke-hi);background:rgba(251,146,60,.06);font-weight:700}
+.badge{display:inline-block;min-width:78px;text-align:center;padding:3px 10px;border-radius:2px;font-weight:700;font-size:12.5px}
+.badge.p{background:rgba(52,211,153,.12);color:var(--green);border:1px solid rgba(52,211,153,.35)}
+.badge.n{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.35)}
+.wr{display:inline-flex;align-items:center;gap:9px;justify-content:flex-end}
+.wr i{width:54px;height:4px;background:rgba(138,145,173,.25);border-radius:2px;overflow:hidden;display:inline-block}
+.wr i b{display:block;height:100%;background:linear-gradient(90deg,var(--cyan),#67e8f9);border-radius:2px}
+
+/* breakdown cards */
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.card{position:relative;background:var(--glass);border:1px solid var(--stroke);padding:22px;backdrop-filter:blur(8px)}
+.card::before{content:"";position:absolute;top:0;left:0;width:44px;height:2px;background:var(--orange);box-shadow:0 0 12px rgba(251,146,60,.6)}
+.card h3{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:3px}
+.card .sub{font-size:12px;color:var(--dim);margin-bottom:16px}
+.row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(120,140,255,.12)}
+.row:last-of-type{border-bottom:none}
+.row .lab{font-size:13px;flex:1}
+.row .meta{font-family:'JetBrains Mono';font-size:10px;color:var(--dim);min-width:54px;text-align:right}
+.row .val{font-family:'JetBrains Mono';font-size:12.5px;min-width:62px;text-align:right;font-weight:700}
+.card p.note{margin-top:14px;font-size:12.5px;color:var(--dim);line-height:1.55}
+
+/* risk */
+.disc{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.disc .card .v{font-family:'Space Grotesk';font-weight:700;font-size:28px}
+.disc .card .l{font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-top:6px}
+.disc .card p{font-size:12.5px;color:var(--dim);margin-top:10px;line-height:1.55}
+
+/* method */
+.method{margin-top:64px;border:1px solid var(--stroke);background:linear-gradient(135deg,rgba(251,146,60,.07),rgba(34,211,238,.05)),var(--glass);padding:34px 36px;display:grid;grid-template-columns:1fr 1fr;gap:36px;backdrop-filter:blur(8px)}
+.method h3{font-family:'Space Grotesk';font-weight:600;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:10px}
+.method h3::before{content:"// ";color:var(--orange)}
+.method p{font-size:13.5px;color:#b6bcd4}
+.method .mark{color:var(--txt);font-weight:600}
+
+.vs{margin-top:16px;display:grid;grid-template-columns:1fr auto 1fr 1.3fr;align-items:stretch;border:1px solid var(--stroke);background:var(--glass);backdrop-filter:blur(8px);border-radius:18px;overflow:hidden}
+.vs-item{padding:16px 20px}
+.vs-item.hi{background:linear-gradient(90deg,rgba(251,146,60,.14),rgba(251,146,60,.02));border-left:2px solid var(--orange)}
+.vs-tag{font-family:'JetBrains Mono';font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.vs-item.hi .vs-tag{color:var(--orange)}
+.vs-v{font-family:'Space Grotesk';font-weight:700;font-size:28px;line-height:1.1;margin-top:4px;color:var(--cyan)}
+.vs-item.hi .vs-v{color:var(--orange);text-shadow:0 0 22px rgba(251,146,60,.45)}
+.vs-s{font-family:'JetBrains Mono';font-size:10.5px;color:var(--dim);margin-top:2px}
+.vs-mid{display:flex;align-items:center;padding:0 6px;font-family:'Space Grotesk';font-weight:600;color:var(--dim);text-transform:uppercase;letter-spacing:.1em}
+.vs-note{display:flex;align-items:center;padding:16px 20px;border-left:1px solid var(--stroke);font-size:13px;color:#b6bcd4}
+.vs-note b{color:var(--green)}
+.legend{display:flex;gap:18px;font-family:'JetBrains Mono';font-size:10.5px;letter-spacing:.08em;color:var(--dim);text-transform:uppercase}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px}
+@media (max-width:840px){.legend{flex-direction:column;gap:4px}}
+.tbl th.hl{color:var(--orange)}
+.tbl td.dimc{color:var(--dim)}
+@media (max-width:840px){
+  .vs{grid-template-columns:1fr}
+  .vs-mid{padding:2px 20px}
+  .vs-note{border-left:none;border-top:1px solid var(--stroke)}
+}
+
+footer{border-top:1px solid var(--stroke);margin-top:64px;padding:26px 0 44px;font-size:11.5px;color:var(--dim)}
+footer .f{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap}
+footer .age{font-family:'JetBrains Mono';border:1.5px solid var(--dim);border-radius:50%;width:36px;height:36px;display:flex;align-items:center;justify-content:center;font-size:11px;flex:none}
+
+@media (max-width:840px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .grid-3,.disc{grid-template-columns:1fr}
+  .method{grid-template-columns:1fr;padding:26px}
+  .curve-cap{font-size:8.5px;padding:10px 12px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  .eyebrow::before,h2::after{animation:none}
+}
+
+/* ---------- harmonisation TradeBET ---------- */
+.kpi,.card,.tbl-wrap,.curve-block,.method{border-radius:18px;overflow:hidden}
+.kpi::before,.kpi::after{display:none}
+.eyebrow,.badge{border-radius:100px}
+h2::after{content:"";animation:none}
+.brand-name b{font-weight:700}
+header{background:rgba(5,6,15,.82)}
+.tbl th:first-child,.tbl td:first-child{font-family:'Space Grotesk',sans-serif}
+</style>
+</head>
+<body>
+<div class="grid-bg" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap hd">
+    <div class="brand">
+      <div>
+        <div class="brand-name">TRADE<b style="background:linear-gradient(90deg,#22d3ee,#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent">BET</b></div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.24em;color:#8a91ad;text-transform:uppercase;margin-top:2px">NBAnalytics &middot; Track record</div>
+      </div>
+    </div>
+    <div class="hd-right">
+      <div class="hd-tag">Track record · 100% vérifié</div>
+      <div class="hd-period">Saison NBA 2025–26</div>
+    </div>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap">
+    <a href="index.html" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#22d3ee;text-decoration:none;letter-spacing:.16em;text-transform:uppercase;display:inline-block;margin-bottom:18px">&#8592; Retour &agrave; l'accueil TradeBET</a><br>
+    <span class="eyebrow">Player Props NBA · 22 oct. 2025 → 14 juin 2026</span>
+    <h1><span class="glow">+57,56 unités</span><small>en mise fixe 1u — saison complète, regular season & playoffs</small></h1>
+    <p class="hero-sub">837 paris trackés, horodatés avant chaque match, réglés automatiquement. En misant simplement 1 unité sur chaque sélection, un abonné termine la saison à <strong style="color:var(--txt)">+57,56u pour 837u engagées</strong>. Aucune sélection retirée, aucun résultat maquillé.</p>
+
+    <div class="kpis">
+      <div class="kpi"><div class="v o">+57,56u</div><div class="l">Profit mise fixe</div><div class="s">1u sur chaque pari</div></div>
+      <div class="kpi"><div class="v g">+6,88&nbsp;%</div><div class="l">ROI mise fixe</div><div class="s">sur 837u engagées</div></div>
+      <div class="kpi"><div class="v">58,4&nbsp;%</div><div class="l">Réussite</div><div class="s">471 V — 335 D</div></div>
+      <div class="kpi"><div class="v c">837</div><div class="l">Paris trackés</div><div class="s">806 réglés · 31 void*</div></div>
+      <div class="kpi"><div class="v">1,84</div><div class="l">Cote moyenne</div><div class="s">de 1,49 à 2,66</div></div>
+    </div>
+
+    <div class="vs">
+      <div class="vs-item hi">
+        <div class="vs-tag">Mise fixe 1u</div>
+        <div class="vs-v">+57,56u</div>
+        <div class="vs-s">ROI +6,88&nbsp;% · 837u engagées</div>
+      </div>
+      <div class="vs-mid">vs</div>
+      <div class="vs-item">
+        <div class="vs-tag">Mises variables (0,25u, 0,5u ou 1u)</div>
+        <div class="vs-v">+47,84u</div>
+        <div class="vs-s">ROI +6,53&nbsp;% · 732u engagées</div>
+      </div>
+      <div class="vs-note"><span>La mise fixe, la plus simple à suivre pour un abonné, fait <b>+9,72u de mieux</b> que le suivi en mises variables.</span></div>
+    </div>
+
+    <div class="curve-block">
+      <div class="curve-head">
+        <span class="curve-title">Évolution des unités — saison complète</span>
+        <span class="legend"><span><i style="background:var(--orange);box-shadow:0 0 8px var(--orange)"></i>Mise fixe 1u</span><span><i style="background:var(--cyan);opacity:.7"></i>Mises variables</span></span>
+      </div>
+      <svg id="chart" viewBox="0 0 1100 380" role="img" aria-label="Courbes cumulées : +57,56u en mise fixe, +47,84u en mises variables"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fb923c" stop-opacity="0.30"></stop><stop offset="1" stop-color="#fb923c" stop-opacity="0"></stop></linearGradient><filter id="glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs><line x1="68" x2="980" y1="350.97374179431074" y2="350.97374179431074" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="none"></line><text x="56" y="355.97374179431074" fill="#8a91ad" font-size="14" font-family="JetBrains Mono" text-anchor="end">0u</text><line x1="68" x2="980" y1="299.39512347608627" y2="299.39512347608627" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="3 6"></line><text x="56" y="304.39512347608627" fill="#9aa3c0" font-size="14" font-family="JetBrains Mono" text-anchor="end">+10u</text><line x1="68" x2="980" y1="247.81650515786183" y2="247.81650515786183" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="3 6"></line><text x="56" y="252.81650515786183" fill="#9aa3c0" font-size="14" font-family="JetBrains Mono" text-anchor="end">+20u</text><line x1="68" x2="980" y1="196.23788683963738" y2="196.23788683963738" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="3 6"></line><text x="56" y="201.23788683963738" fill="#9aa3c0" font-size="14" font-family="JetBrains Mono" text-anchor="end">+30u</text><line x1="68" x2="980" y1="144.6592685214129" y2="144.6592685214129" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="3 6"></line><text x="56" y="149.6592685214129" fill="#9aa3c0" font-size="14" font-family="JetBrains Mono" text-anchor="end">+40u</text><line x1="68" x2="980" y1="93.08065020318848" y2="93.08065020318848" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="3 6"></line><text x="56" y="98.08065020318848" fill="#9aa3c0" font-size="14" font-family="JetBrains Mono" text-anchor="end">+50u</text><line x1="68" x2="980" y1="41.50203188496403" y2="41.50203188496403" stroke="rgba(120,140,255,.28)" stroke-width="1" stroke-dasharray="3 6"></line><text x="56" y="46.50203188496403" fill="#9aa3c0" font-size="14" font-family="JetBrains Mono" text-anchor="end">+60u</text><path d="M68 350.97374179431074 L68.0 356.1 L74.6 360.0 L81.2 331.4 L87.8 334.5 L94.4 336.9 L101.0 329.9 L107.6 352.5 L114.3 347.1 L120.9 331.3 L127.5 344.1 L134.1 347.4 L140.7 350.1 L147.3 341.8 L153.9 344.8 L160.5 338.7 L167.1 331.6 L173.7 333.0 L180.3 345.3 L186.9 327.8 L193.5 321.1 L200.1 332.6 L206.8 345.4 L213.4 339.6 L220.0 321.6 L226.6 316.7 L233.2 318.5 L239.8 301.5 L246.4 322.2 L253.0 316.5 L259.6 300.6 L266.2 303.2 L272.8 295.5 L279.4 307.0 L286.0 302.4 L292.7 314.1 L299.3 308.2 L305.9 291.9 L312.5 286.6 L319.1 298.8 L325.7 301.1 L332.3 274.2 L338.9 277.9 L345.5 290.1 L352.1 302.4 L358.7 304.7 L365.3 287.0 L371.9 290.3 L378.5 274.8 L385.2 267.9 L391.8 253.5 L398.4 246.0 L405.0 249.4 L411.6 242.0 L418.2 264.3 L424.8 237.9 L431.4 259.5 L438.0 280.8 L444.6 293.4 L451.2 306.2 L457.8 308.3 L464.4 307.1 L471.1 289.9 L477.7 284.2 L484.3 295.8 L490.9 307.9 L497.5 292.0 L504.1 276.6 L510.7 260.0 L517.3 270.6 L523.9 282.6 L530.5 276.3 L537.1 269.8 L543.7 264.0 L550.3 276.5 L556.9 269.3 L563.6 290.9 L570.2 283.5 L576.8 285.5 L583.4 279.0 L590.0 291.2 L596.6 302.9 L603.2 306.4 L609.8 300.1 L616.4 303.0 L623.0 296.6 L629.6 280.7 L636.2 274.1 L642.8 256.4 L649.5 250.4 L656.1 261.7 L662.7 265.2 L669.3 287.2 L675.9 270.4 L682.5 281.8 L689.1 284.1 L695.7 296.5 L702.3 297.8 L708.9 290.8 L715.5 301.5 L722.1 295.4 L728.7 289.2 L735.3 282.4 L742.0 274.7 L748.6 276.9 L755.2 262.4 L761.8 246.7 L768.4 259.1 L775.0 234.5 L781.6 228.0 L788.2 230.4 L794.8 223.0 L801.4 225.8 L808.0 219.4 L814.6 202.8 L821.2 205.9 L827.9 186.6 L834.5 178.1 L841.1 161.5 L847.7 135.9 L854.3 158.2 L860.9 160.3 L867.5 133.8 L874.1 118.7 L880.7 103.2 L887.3 82.4 L893.9 75.2 L900.5 59.2 L907.1 52.8 L913.7 55.7 L920.4 59.3 L927.0 51.3 L933.6 50.6 L940.2 52.6 L946.8 53.9 L953.4 57.5 L960.0 53.4 L960 350.97374179431074 Z" fill="url(#g)"></path><path d="M68.0 353.6 L74.6 357.4 L81.2 329.6 L87.8 330.1 L94.4 330.0 L101.0 327.4 L107.6 351.6 L114.3 346.1 L120.9 331.5 L127.5 344.3 L134.1 342.4 L140.7 345.1 L147.3 339.4 L153.9 342.3 L160.5 339.4 L167.1 332.3 L173.7 333.1 L180.3 345.0 L186.9 334.3 L193.5 327.6 L200.1 334.0 L206.8 349.3 L213.4 343.5 L220.0 332.8 L226.6 328.1 L233.2 332.3 L239.8 315.2 L246.4 336.0 L253.0 331.0 L259.6 312.5 L266.2 312.5 L272.8 304.7 L279.4 311.0 L286.0 303.8 L292.7 318.1 L299.3 309.6 L305.9 300.0 L312.5 295.7 L319.1 310.3 L325.7 317.2 L332.3 292.7 L338.9 296.4 L345.5 303.4 L352.1 312.6 L358.7 312.2 L365.3 294.5 L371.9 299.5 L378.5 283.5 L385.2 276.5 L391.8 262.2 L398.4 254.7 L405.0 260.3 L411.6 253.0 L418.2 272.7 L424.8 248.9 L431.4 270.6 L438.0 286.7 L444.6 294.1 L451.2 304.3 L457.8 308.6 L464.4 310.9 L471.1 295.4 L477.7 291.9 L484.3 303.5 L490.9 315.0 L497.5 301.3 L504.1 290.2 L510.7 273.4 L517.3 286.3 L523.9 295.6 L530.5 291.7 L537.1 285.2 L543.7 279.4 L550.3 291.9 L556.9 284.6 L563.6 306.3 L570.2 301.1 L576.8 300.6 L583.4 294.0 L590.0 305.8 L596.6 317.3 L603.2 320.8 L609.8 313.6 L616.4 318.5 L623.0 314.0 L629.6 302.2 L636.2 297.7 L642.8 284.7 L649.5 282.3 L656.1 291.0 L662.7 289.3 L669.3 308.0 L675.9 295.5 L682.5 306.9 L689.1 310.6 L695.7 320.4 L702.3 322.1 L708.9 312.5 L715.5 323.1 L722.1 316.9 L728.7 310.7 L735.3 301.4 L742.0 291.1 L748.6 292.6 L755.2 278.2 L761.8 264.9 L768.4 274.6 L775.0 250.0 L781.6 243.6 L788.2 243.4 L794.8 233.4 L801.4 235.6 L808.0 224.0 L814.6 209.6 L821.2 214.4 L827.9 197.9 L834.5 194.0 L841.1 185.6 L847.7 170.5 L854.3 190.2 L860.9 192.3 L867.5 165.8 L874.1 150.7 L880.7 139.5 L887.3 129.4 L893.9 122.3 L900.5 108.5 L907.1 104.1 L913.7 106.7 L920.4 107.8 L927.0 102.1 L933.6 100.6 L940.2 100.3 L946.8 100.9 L953.4 108.3 L960.0 104.2" fill="none" stroke="#22d3ee" stroke-width="1.8" stroke-opacity="0.7" stroke-linejoin="round"></path><path d="M68.0 356.1 L74.6 360.0 L81.2 331.4 L87.8 334.5 L94.4 336.9 L101.0 329.9 L107.6 352.5 L114.3 347.1 L120.9 331.3 L127.5 344.1 L134.1 347.4 L140.7 350.1 L147.3 341.8 L153.9 344.8 L160.5 338.7 L167.1 331.6 L173.7 333.0 L180.3 345.3 L186.9 327.8 L193.5 321.1 L200.1 332.6 L206.8 345.4 L213.4 339.6 L220.0 321.6 L226.6 316.7 L233.2 318.5 L239.8 301.5 L246.4 322.2 L253.0 316.5 L259.6 300.6 L266.2 303.2 L272.8 295.5 L279.4 307.0 L286.0 302.4 L292.7 314.1 L299.3 308.2 L305.9 291.9 L312.5 286.6 L319.1 298.8 L325.7 301.1 L332.3 274.2 L338.9 277.9 L345.5 290.1 L352.1 302.4 L358.7 304.7 L365.3 287.0 L371.9 290.3 L378.5 274.8 L385.2 267.9 L391.8 253.5 L398.4 246.0 L405.0 249.4 L411.6 242.0 L418.2 264.3 L424.8 237.9 L431.4 259.5 L438.0 280.8 L444.6 293.4 L451.2 306.2 L457.8 308.3 L464.4 307.1 L471.1 289.9 L477.7 284.2 L484.3 295.8 L490.9 307.9 L497.5 292.0 L504.1 276.6 L510.7 260.0 L517.3 270.6 L523.9 282.6 L530.5 276.3 L537.1 269.8 L543.7 264.0 L550.3 276.5 L556.9 269.3 L563.6 290.9 L570.2 283.5 L576.8 285.5 L583.4 279.0 L590.0 291.2 L596.6 302.9 L603.2 306.4 L609.8 300.1 L616.4 303.0 L623.0 296.6 L629.6 280.7 L636.2 274.1 L642.8 256.4 L649.5 250.4 L656.1 261.7 L662.7 265.2 L669.3 287.2 L675.9 270.4 L682.5 281.8 L689.1 284.1 L695.7 296.5 L702.3 297.8 L708.9 290.8 L715.5 301.5 L722.1 295.4 L728.7 289.2 L735.3 282.4 L742.0 274.7 L748.6 276.9 L755.2 262.4 L761.8 246.7 L768.4 259.1 L775.0 234.5 L781.6 228.0 L788.2 230.4 L794.8 223.0 L801.4 225.8 L808.0 219.4 L814.6 202.8 L821.2 205.9 L827.9 186.6 L834.5 178.1 L841.1 161.5 L847.7 135.9 L854.3 158.2 L860.9 160.3 L867.5 133.8 L874.1 118.7 L880.7 103.2 L887.3 82.4 L893.9 75.2 L900.5 59.2 L907.1 52.8 L913.7 55.7 L920.4 59.3 L927.0 51.3 L933.6 50.6 L940.2 52.6 L946.8 53.9 L953.4 57.5 L960.0 53.4" fill="none" stroke="#fb923c" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" filter="url(#glow)"></path><circle cx="960" cy="54.0872147546108" r="6" fill="#fb923c" filter="url(#glow)"></circle><line x1="960" y1="54.0872147546108" x2="976" y2="28.087214754610798" stroke="#fb923c" stroke-opacity="0.6"></line><rect x="976" y="4.087214754610798" width="118" height="48" rx="3" fill="rgba(251,146,60,.14)" stroke="#fb923c" stroke-width="1" stroke-opacity="1"></rect><text x="1035" y="32.0872147546108" fill="#fdba74" font-size="25" font-family="Space Grotesk" font-weight="700" text-anchor="middle">+57,56u</text><text x="1035" y="46.0872147546108" fill="#8a91ad" font-size="9" font-family="JetBrains Mono" text-anchor="middle" letter-spacing="1">MISE FIXE 1U</text><circle cx="960" cy="104.22163175992495" r="4" fill="#22d3ee" filter=""></circle><line x1="960" y1="104.22163175992495" x2="976" y2="130.22163175992495" stroke="#22d3ee" stroke-opacity="0.6"></line><rect x="976" y="110.22163175992495" width="104" height="40" rx="3" fill="rgba(34,211,238,.08)" stroke="#22d3ee" stroke-width="1" stroke-opacity="0.6"></rect><text x="1028" y="133.22163175992495" fill="#a5f3fc" font-size="19" font-family="Space Grotesk" font-weight="700" text-anchor="middle">+47,84u</text><text x="1028" y="145.22163175992495" fill="#8a91ad" font-size="9" font-family="JetBrains Mono" text-anchor="middle" letter-spacing="1">MISES VARIABLES</text></svg>
+      <div class="curve-cap">
+        <span>Oct</span><span>Nov</span><span>Déc</span><span>Jan</span><span>Fév</span><span>Mar</span><span>Avr</span><span>Mai</span><span>Juin</span>
+      </div>
+    </div>
+    <p style="font-family:'JetBrains Mono';font-size:10.5px;color:var(--dim);margin-top:10px">* void = paris annulés par le bookmaker (match reporté, joueur forfait) — mise remboursée, conservés dans l'historique par transparence.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">[01]</span>
+      <h2>Box score mensuel</h2>
+      <span class="sec-note">résultats en mise fixe 1u · mises variables en rappel</span>
+    </div>
+    <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr><th>Mois</th><th>Paris</th><th>Réussite</th><th class="hl">+/− Mise fixe 1u</th><th class="hl">ROI mise fixe</th><th>Mises variables</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Oct. 2025</td><td>63</td><td><span class="wr"><i><b style="width:56%"></b></i>55,6&nbsp;%</span></td><td><span class="badge p">+0,55</span></td><td class="pos">+0,9&nbsp;%</td><td class="dimc">+1,52u</td></tr>
+        <tr><td>Nov. 2025</td><td>220</td><td><span class="wr"><i><b style="width:58%"></b></i>58,2&nbsp;%</span></td><td><span class="badge p">+14,22</span></td><td class="pos">+6,5&nbsp;%</td><td class="dimc">+11,57u</td></tr>
+        <tr><td>Déc. 2025</td><td>156</td><td><span class="wr"><i><b style="width:54%"></b></i>54,5&nbsp;%</span></td><td><span class="badge n">−0,33</span></td><td class="neg">−0,2&nbsp;%</td><td class="dimc">−1,63u</td></tr>
+        <tr><td>Janv. 2026</td><td>69</td><td><span class="wr"><i><b style="width:54%"></b></i>53,6&nbsp;%</span></td><td><span class="badge n">−1,52</span></td><td class="neg">−2,2&nbsp;%</td><td class="dimc">−2,74u</td></tr>
+        <tr><td>Févr. 2026</td><td>58</td><td><span class="wr"><i><b style="width:53%"></b></i>53,4&nbsp;%</span></td><td><span class="badge n">−0,95</span></td><td class="neg">−1,6&nbsp;%</td><td class="dimc">−1,89u</td></tr>
+        <tr><td>Mars 2026</td><td>76</td><td><span class="wr"><i><b style="width:62%"></b></i>61,8&nbsp;%</span></td><td><span class="badge p">+9,85</span></td><td class="pos">+13,0&nbsp;%</td><td class="dimc">+11,97u</td></tr>
+        <tr><td>Avr. 2026</td><td>84</td><td><span class="wr"><i><b style="width:67%"></b></i>66,7&nbsp;%</span></td><td><span class="badge p">+19,48</span></td><td class="pos">+23,2&nbsp;%</td><td class="dimc">+16,29u</td></tr>
+        <tr><td>Mai 2026</td><td>55</td><td><span class="wr"><i><b style="width:71%"></b></i>70,9&nbsp;%</span></td><td><span class="badge p">+16,80</span></td><td class="pos">+30,6&nbsp;%</td><td class="dimc">+13,16u</td></tr>
+        <tr><td>Juin 2026</td><td>25</td><td><span class="wr"><i><b style="width:52%"></b></i>52,0&nbsp;%</span></td><td><span class="badge n">−0,41</span></td><td class="neg">−1,6&nbsp;%</td><td class="dimc">−0,41u</td></tr>
+        <tr class="total"><td>Saison</td><td>837</td><td><span class="wr"><i><b style="width:58%"></b></i>58,4&nbsp;%</span></td><td><span class="badge p">+57,56</span></td><td class="pos">+6,88&nbsp;%</td><td class="dimc">+47,84u</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-family:'JetBrains Mono';font-size:10.5px;color:var(--dim);margin-top:10px">Total saison : chiffres du bilan officiel (ROI calculé sur les 837 paris, voids inclus). Détail mensuel, courbes et segments recalculés pari par pari à partir des cotes ; écart d'arrondi de 0,13u au total.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">[02]</span>
+      <h2>D'où vient la performance</h2>
+      <span class="sec-note">ROI en mise fixe 1u · 806 paris réglés</span>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <h3>Par marché</h3>
+        <div class="sub">Spécialité : totaux de points joueur</div>
+        <div class="row"><span class="lab">Points joueur</span><span class="meta">648</span><span class="val pos">+7,6&nbsp;%</span></div>
+        <div class="row"><span class="lab">Passes</span><span class="meta">39</span><span class="val pos">+8,6&nbsp;%</span></div>
+        <div class="row"><span class="lab">Pts + Reb + Ast</span><span class="meta">27</span><span class="val pos">+15,7&nbsp;%</span></div>
+        <div class="row"><span class="lab">Rebonds</span><span class="meta">31</span><span class="val pos">+7,2&nbsp;%</span></div>
+        <div class="row"><span class="lab">3-points</span><span class="meta">9</span><span class="val pos">+41,2&nbsp;%</span></div>
+        <div class="row"><span class="lab">Autres</span><span class="meta">52</span><span class="val neg">−9,8&nbsp;%</span></div>
+      </div>
+      <div class="card">
+        <h3>Par tranche de cotes</h3>
+        <div class="sub">Rentable sur toutes les tranches jouées</div>
+        <div class="row"><span class="lab">1,40 – 1,70</span><span class="meta">73</span><span class="val pos">+1,7&nbsp;%</span></div>
+        <div class="row"><span class="lab">1,70 – 1,85</span><span class="meta">411</span><span class="val pos">+9,4&nbsp;%</span></div>
+        <div class="row"><span class="lab">1,85 – 2,00</span><span class="meta">284</span><span class="val pos">+3,4&nbsp;%</span></div>
+        <div class="row"><span class="lab">2,00 et +</span><span class="meta">38</span><span class="val pos">+21,3&nbsp;%</span></div>
+        <p class="note">Le cœur du volume (1,70–1,85) est aussi le plus solide : pas de dépendance aux grosses cotes.</p>
+      </div>
+      <div class="card">
+        <h3>Under vs Over</h3>
+        <div class="sub">Un angle assumé : la valeur est sur l'Under</div>
+        <div class="row"><span class="lab">Under</span><span class="meta">698</span><span class="val pos">+7,9&nbsp;%</span></div>
+        <div class="row"><span class="lab">Over</span><span class="meta">106</span><span class="val pos">+1,9&nbsp;%</span></div>
+        <p class="note">87&nbsp;% du volume est joué à l'Under sur les lignes de joueurs — là où le marché, tiré par le public, surcote régulièrement les performances offensives.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-num">[03]</span>
+      <h2>Gestion du risque</h2>
+      <span class="sec-note">la rentabilité ne vaut rien sans discipline</span>
+    </div>
+    <div class="disc">
+      <div class="card">
+        <div class="v" style="color:var(--orange)">1u</div><div class="l">Mise fixe recommandée</div>
+        <p>Une unité par pari, sans calcul : aucun «&nbsp;all-in&nbsp;», aucune martingale. Le plus simple est aussi le plus rentable.</p>
+      </div>
+      <div class="card">
+        <div class="v neg">−16,5u</div><div class="l">Drawdown max (mise fixe)</div>
+        <p>Pire creux de la saison (déc.–févr.), entièrement absorbé et dépassé dès mars.</p>
+      </div>
+      <div class="card">
+        <div class="v">10 / 8</div><div class="l">Séries max (V / D)</div>
+        <p>Les séries de défaites font partie du jeu ; le stake plan est conçu pour les encaisser.</p>
+      </div>
+      <div class="card">
+        <div class="v">806</div><div class="l">Échantillon</div>
+        <p>Un volume qui permet de juger la méthode sur la durée, pas sur un mois chanceux.</p>
+      </div>
+    </div>
+
+    <div class="method">
+      <div>
+        <h3>La méthode</h3>
+        <p>Modélisation statistique des performances individuelles NBA (minutes projetées, matchups, rythme des équipes, contexte de blessures), confrontée aux lignes des bookmakers. Un pari n'est envoyé que lorsque l'écart entre notre projection et la ligne dépasse notre seuil de valeur — <span class="mark">en moyenne 3 à 4 sélections par soirée de matchs</span>.</p>
+      </div>
+      <div>
+        <h3>La transparence</h3>
+        <p>Chaque sélection est horodatée avant le début du match : cote prise, cote d'ouverture et cote de clôture sont archivées. Les 31 paris annulés (matchs reportés, joueurs forfaits) restent visibles dans l'historique. <span class="mark">Le fichier brut est consultable sur demande.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap f">
+    <div style="max-width:680px">
+      <strong style="color:var(--txt)">Avertissement.</strong> Les performances passées ne préjugent pas des performances futures. Les paris sportifs comportent un risque de perte financière : ne misez que ce que vous pouvez vous permettre de perdre. Jouer comporte des risques : endettement, isolement, dépendance. Pour être aidé, appelez le 09&nbsp;74&nbsp;75&nbsp;13&nbsp;13 (appel non surtaxé).
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="age">18+</div>
+      <div>TradeBET · Saison 2025–26<br>Interdit aux mineurs</div>
+    </div>
+  </div>
+</footer>
+
+
+</body>
+</html>

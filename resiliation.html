@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Résilier mon abonnement — TradeBET</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#05060f;--card:rgba(255,255,255,.04);--border:rgba(120,140,255,.18);--cyan:#22d3ee;--violet:#8b5cf6;--green:#34d399;--red:#f87171;--txt:#e6e9f5;--muted:#8a91ad;--head:'Space Grotesk',sans-serif;--body:'Inter',system-ui,sans-serif}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--txt);font-family:var(--body);line-height:1.7}
+  .container{max-width:720px;margin:0 auto;padding:0 24px}
+  .warning-top{background:#111;border-bottom:1px solid rgba(255,255,255,.12);padding:10px 16px;text-align:center;font-size:.8rem;color:#ddd}
+  .warning-top strong{color:#fff}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:22px 0;border-bottom:1px solid rgba(255,255,255,.07)}
+  .logo{font-family:var(--head);font-size:1.3rem;font-weight:700;text-decoration:none;color:var(--txt);letter-spacing:.05em}
+  .logo span{background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  nav a.back{color:var(--muted);text-decoration:none;font-size:.9rem}
+  nav a.back:hover{color:var(--cyan)}
+  h1{font-family:var(--head);font-size:2rem;margin:40px 0 10px;font-weight:700}
+  h1 span{background:linear-gradient(90deg,var(--cyan),var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .intro{color:var(--muted);font-size:.92rem;margin-bottom:26px}
+  .steps{display:flex;gap:8px;margin-bottom:22px;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+  .steps span{flex:1;text-align:center;padding:8px 6px;border-radius:100px;border:1px solid var(--border);color:var(--muted)}
+  .steps span.on{border-color:var(--cyan);color:var(--cyan);background:rgba(34,211,238,.07)}
+  .panel{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:30px}
+  .panel h2{font-family:var(--head);font-size:1.15rem;color:var(--cyan);margin-bottom:18px;font-weight:600}
+  .field{margin-bottom:18px}
+  .field label{display:block;font-size:.85rem;font-weight:600;margin-bottom:6px}
+  .field label small{font-weight:400;color:var(--muted)}
+  .field input,.field select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:rgba(0,0,0,.35);color:var(--txt);font:inherit;font-size:.95rem}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--cyan)}
+  .field .err{display:none;color:var(--red);font-size:.8rem;margin-top:5px}
+  .field.invalid input,.field.invalid select{border-color:var(--red)}
+  .field.invalid .err{display:block}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .hp{position:absolute;left:-9999px}
+  .btn{display:inline-block;padding:14px 28px;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;border:none;font-family:var(--body);text-decoration:none;text-align:center}
+  .btn-primary{background:linear-gradient(90deg,var(--cyan),var(--violet));color:#05060f}
+  .btn-primary:disabled{opacity:.6;cursor:wait}
+  .btn-ghost{background:transparent;color:var(--txt);border:1px solid var(--border)}
+  .btn-ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+  .recap{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:.92rem}
+  .recap th{text-align:left;color:var(--muted);font-weight:500;padding:9px 12px 9px 0;width:45%;vertical-align:top}
+  .recap td{padding:9px 0;font-weight:600;word-break:break-word}
+  .recap tr+tr th,.recap tr+tr td{border-top:1px solid rgba(255,255,255,.07)}
+  .effect{background:rgba(34,211,238,.07);border:1px solid rgba(34,211,238,.3);border-radius:12px;padding:16px 18px;font-size:.9rem;margin-bottom:22px}
+  .effect b{color:var(--cyan)}
+  .ok-icon{width:52px;height:52px;border-radius:50%;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.4);display:flex;align-items:center;justify-content:center;color:var(--green);font-size:1.5rem;margin-bottom:14px}
+  .alert{display:none;background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.35);color:#fecaca;border-radius:12px;padding:14px 16px;font-size:.87rem;margin-bottom:18px}
+  .alert a{color:var(--cyan)}
+  .note{color:var(--muted);font-size:.8rem;margin-top:18px}
+  [hidden]{display:none !important}
+  footer{padding:40px 0 60px;text-align:center;color:#5a5f78;font-size:.78rem}
+  footer a{color:var(--cyan)}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}.panel{padding:22px}.actions .btn{width:100%}}
+  @media print{.warning-top,nav,.steps,.actions,footer{display:none}body{background:#fff;color:#000}.panel{border-color:#999}.panel h2,.effect b{color:#000}.recap th{color:#444}}
+</style>
+</head>
+<body>
+
+<div class="warning-top"><strong>JOUER COMPORTE DES RISQUES : ENDETTEMENT, ISOLEMENT, DÉPENDANCE.</strong> Appelez le <strong>09&nbsp;74&nbsp;75&nbsp;13&nbsp;13</strong> (appel non surtaxé) · Interdit aux mineurs (−18)</div>
+
+<div class="container">
+  <nav>
+    <a class="logo" href="index.html">TRADE<span>BET</span></a>
+    <a class="back" href="index.html">← Retour à l'accueil</a>
+  </nav>
+
+  <h1>Résilier mon <span>abonnement</span></h1>
+  <p class="intro">Sans frais ni justification. La résiliation prend effet à la fin de la période déjà réglée ; vous conservez l'accès jusqu'à cette date et aucun nouveau paiement ne vous sera demandé.</p>
+
+  <div class="steps" aria-hidden="true">
+    <span id="st1" class="on">1. Identification</span><span id="st2">2. Récapitulatif</span><span id="st3">3. Confirmation</span>
+  </div>
+
+  <!-- ÉTAPE 1 : FORMULAIRE -->
+  <form id="step1" class="panel" novalidate>
+    <h2>Identification de l'abonnement</h2>
+    <div class="row2">
+      <div class="field"><label for="nom">Nom</label><input id="nom" name="nom" autocomplete="family-name" required><div class="err">Indiquez votre nom.</div></div>
+      <div class="field"><label for="prenoms">Prénom(s)</label><input id="prenoms" name="prenoms" autocomplete="given-name" required><div class="err">Indiquez votre ou vos prénoms.</div></div>
+    </div>
+    <div class="field"><label for="telegram">Pseudo Telegram</label><input id="telegram" name="telegram" placeholder="@monpseudo" autocomplete="off" required><div class="err">Indiquez votre pseudo Telegram.</div></div>
+    <div class="field"><label for="email">Adresse email <small>— pour recevoir l'accusé de réception</small></label><input id="email" name="email" type="email" autocomplete="email" required><div class="err">Indiquez une adresse email valide.</div></div>
+    <div class="row2">
+      <div class="field"><label for="formule">Formule</label>
+        <select id="formule" name="formule" required><option value="">Choisir…</option><option value="Mensuel">Mensuel</option><option value="Annuel">Annuel</option></select>
+        <div class="err">Choisissez votre formule.</div></div>
+      <div class="field"><label for="paiement">Mode de paiement</label>
+        <select id="paiement" name="paiement" required><option value="">Choisir…</option><option value="Carte bancaire (Stripe)">Carte bancaire (Stripe)</option><option value="Virement bancaire">Virement bancaire</option></select>
+        <div class="err">Choisissez votre mode de paiement.</div></div>
+    </div>
+    <div class="field"><label for="dernier">Date de votre dernier règlement <small>— sert à calculer la fin de la période réglée</small></label><input id="dernier" name="dernier" type="date" required><div class="err">Indiquez une date passée ou la date du jour.</div></div>
+    <input class="hp" type="text" id="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <div class="actions"><button type="submit" class="btn btn-primary">Continuer</button></div>
+  </form>
+
+  <!-- ÉTAPE 2 : RÉCAPITULATIF -->
+  <div id="step2" class="panel" hidden>
+    <h2>Vérifiez votre demande</h2>
+    <div class="alert" id="alert"></div>
+    <table class="recap" id="recap"></table>
+    <div class="effect">Si vous confirmez, votre résiliation prendra effet le <b id="effDate2"></b>, au terme de la période déjà réglée.</div>
+    <div class="actions">
+      <button type="button" class="btn btn-primary" id="confirmBtn">Confirmer ma résiliation</button>
+      <button type="button" class="btn btn-ghost" id="editBtn">Modifier</button>
+    </div>
+  </div>
+
+  <!-- ÉTAPE 3 : ACCUSÉ DE RÉCEPTION -->
+  <div id="step3" class="panel" hidden>
+    <div class="ok-icon">✓</div>
+    <h2>Votre demande de résiliation a bien été reçue</h2>
+    <table class="recap" id="receipt"></table>
+    <div class="effect">Date effective de résiliation : <b id="effDate3"></b>. Vous conservez l'accès au service jusqu'à cette date ; aucun nouveau paiement ne vous sera demandé.</div>
+    <p style="font-size:.9rem;color:#c9cede">Un accusé de réception reprenant ces informations vient d'être envoyé à <b id="mailEcho"></b>. Pensez à vérifier vos courriers indésirables. Conservez la référence ci-dessus pour toute question.</p>
+    <div class="actions" style="margin-top:20px">
+      <button type="button" class="btn btn-ghost" onclick="window.print()">Imprimer / enregistrer en PDF</button>
+      <a href="index.html" class="btn btn-ghost">Retour à l'accueil</a>
+    </div>
+  </div>
+
+  <p class="note">Les informations saisies servent uniquement à traiter votre demande de résiliation (voir <a href="mentions-legales.html" style="color:var(--cyan)">Mentions légales</a>). Une question ? <a href="mailto:betpro01@proton.me" style="color:var(--cyan)">betpro01@proton.me</a></p>
+
+  <footer>© 2026 TradeBET — Alan Pratt · SIRET 949 171 078 00031 · <a href="index.html">Accueil</a> · <a href="cgv.html">CGV</a> · <a href="mentions-legales.html">Mentions légales</a></footer>
+</div>
+
+<script>
+(function(){
+  /* Adresse de réception des demandes (celle du site).
+     Au premier envoi, FormSubmit envoie un email d'activation à cette adresse : cliquez sur le lien pour activer le formulaire. */
+  var ENDPOINT = 'https://formsubmit.co/ajax/betpro01@proton.me';
+
+  var $ = function(id){return document.getElementById(id)};
+  var f1=$('step1'), s2=$('step2'), s3=$('step3');
+  var data = null;
+
+  function pad(n){return (n<10?'0':'')+n}
+  function fmt(d){return pad(d.getDate())+'/'+pad(d.getMonth()+1)+'/'+d.getFullYear()}
+  function fmtTime(d){return fmt(d)+' à '+pad(d.getHours())+'h'+pad(d.getMinutes())}
+  function addMonths(d,k){
+    var y=d.getFullYear(), m=d.getMonth()+k, day=d.getDate();
+    var last=new Date(y,m+1,0).getDate();
+    return new Date(y,m,Math.min(day,last));
+  }
+  function todayStart(){var t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())}
+  function parseISO(v){var p=v.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  /* Fin de la période réglée = prochaine échéance après aujourd'hui */
+  function effectiveDate(last, formule){
+    var k = formule==='Annuel'?12:1, t=todayStart(), d=addMonths(last,k);
+    while(d<=t){ d=addMonths(d,k); }
+    return d;
+  }
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function rows(list){return list.map(function(r){return '<tr><th>'+r[0]+'</th><td>'+esc(r[1])+'</td></tr>'}).join('')}
+  function step(n){
+    f1.hidden=n!==1; s2.hidden=n!==2; s3.hidden=n!==3;
+    [1,2,3].forEach(function(i){$('st'+i).classList.toggle('on',i===n)});
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  var t=todayStart();
+  $('dernier').max = t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+
+  f1.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=true;
+    ['nom','prenoms','telegram','email','formule','paiement','dernier'].forEach(function(id){
+      var el=$(id), v=el.value.trim(), good=v!=='';
+      if(id==='email') good=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      if(id==='dernier' && good) good=parseISO(v)<=todayStart();
+      el.parentNode.classList.toggle('invalid',!good);
+      if(!good) ok=false;
+    });
+    if(!ok){ var first=f1.querySelector('.invalid input,.invalid select'); if(first) first.focus(); return; }
+    var last=parseISO($('dernier').value);
+    data={
+      nom:$('nom').value.trim(), prenoms:$('prenoms').value.trim(),
+      telegram:$('telegram').value.trim(), email:$('email').value.trim(),
+      formule:$('formule').value, paiement:$('paiement').value,
+      dernier:fmt(last), effet:fmt(effectiveDate(last,$('formule').value))
+    };
+    $('recap').innerHTML=rows([
+      ['Nom',data.nom],['Prénom(s)',data.prenoms],['Pseudo Telegram',data.telegram],['Email',data.email],
+      ['Formule',data.formule],['Mode de paiement',data.paiement],['Dernier règlement',data.dernier]
+    ]);
+    $('effDate2').textContent=data.effet;
+    $('alert').style.display='none';
+    step(2);
+  });
+
+  $('editBtn').addEventListener('click',function(){step(1)});
+
+  $('confirmBtn').addEventListener('click',function(){
+    if($('hp').value) return; /* anti-spam */
+    var btn=this; btn.disabled=true; btn.textContent='Envoi en cours…';
+    var now=new Date();
+    var ref='RES-'+now.getFullYear()+pad(now.getMonth()+1)+pad(now.getDate())+'-'+Math.random().toString(36).slice(2,7).toUpperCase();
+    var recu=fmtTime(now);
+    var ack =
+      'Bonjour '+data.prenoms+' '+data.nom+',\n\n'+
+      'Nous accusons réception de votre demande de résiliation de votre abonnement TradeBET.\n\n'+
+      'Référence : '+ref+'\n'+
+      'Demande reçue le : '+recu+'\n'+
+      'Formule : '+data.formule+' — '+data.paiement+'\n'+
+      'Pseudo Telegram : '+data.telegram+'\n\n'+
+      'Date effective de résiliation : '+data.effet+'\n'+
+      'Vous conservez l\'accès au service jusqu\'à cette date. Aucun nouveau paiement ne vous sera demandé.\n\n'+
+      'Pour toute question : betpro01@proton.me\n\n'+
+      'TradeBET — Alan Pratt, entrepreneur individuel — SIRET 949 171 078 00031';
+    var payload={
+      _subject:'Résiliation TradeBET — '+data.prenoms+' '+data.nom+' ('+ref+')',
+      _template:'table', _captcha:'false', _replyto:data.email,
+      _autoresponse: ack,
+      'Référence':ref, 'Reçue le':recu,
+      'Nom':data.nom, 'Prénom(s)':data.prenoms, 'Pseudo Telegram':data.telegram,
+      email:data.email, 'Formule':data.formule, 'Mode de paiement':data.paiement,
+      'Dernier règlement':data.dernier, 'Date effective de résiliation':data.effet
+    };
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(payload)})
+      .then(function(r){return r.json().then(function(j){return {ok:r.ok,j:j}})})
+      .then(function(res){
+        if(!res.ok || String(res.j.success)!=='true') throw new Error(res.j.message||'Erreur');
+        $('receipt').innerHTML=rows([
+          ['Référence',ref],['Demande reçue le',recu],['Abonné',data.prenoms+' '+data.nom],
+          ['Pseudo Telegram',data.telegram],['Formule',data.formule+' — '+data.paiement]
+        ]);
+        $('effDate3').textContent=data.effet;
+        $('mailEcho').textContent=data.email;
+        step(3);
+      })
+      .catch(function(){
+        var body=encodeURIComponent('Je demande la résiliation de mon abonnement TradeBET.\n\nNom : '+data.nom+'\nPrénom(s) : '+data.prenoms+'\nPseudo Telegram : '+data.telegram+'\nFormule : '+data.formule+' — '+data.paiement+'\nDernier règlement : '+data.dernier);
+        var a=$('alert');
+        a.innerHTML='L\'envoi n\'a pas abouti. Réessayez dans un instant, ou <a href="mailto:betpro01@proton.me?subject='+encodeURIComponent('Résiliation TradeBET')+'&body='+body+'">envoyez votre demande par email</a> (le message est prérempli).';
+        a.style.display='block';
+        btn.disabled=false; btn.textContent='Confirmer ma résiliation';
+      });
+  });
+})();
+</script>
+</body>
+</html>
